@@ -5,8 +5,10 @@ import openai
 import requests
 from rich.markdown import Markdown
 
-from core.functions import get_file_tree, get_contents_of_file, enabled_functions
+from core.functions import get_file_tree, get_contents_of_file, enabled_functions, truncate_text_to_token_limit
 
+# Reduced from 16k to 14k to allow for prompt context
+MAX_TOKENS = 14_000
 
 def chat_completion_request(messages, functions=None, model="gpt-3.5-turbo-16k"):
     headers = {
@@ -19,7 +21,6 @@ def chat_completion_request(messages, functions=None, model="gpt-3.5-turbo-16k")
         "functions": functions or [],
         "function_call": "auto",
         "temperature": 0,
-        "max_tokens": 4_000,
     }
     try:
         response = requests.post(
@@ -61,11 +62,13 @@ def get_next_completion(previous_response, messages, functions):
     else:
         raise ValueError(f"Function {function_name} not found.")
 
+    truncated_response = truncate_text_to_token_limit(function_response, MAX_TOKENS)
+
     messages.append(
         {
             "role": "function",
             "name": function_name,
-            "content": str(function_response),
+            "content": str(truncated_response),
         }
     )
     next_response = chat_completion_request(

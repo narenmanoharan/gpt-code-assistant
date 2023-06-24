@@ -26,7 +26,6 @@ def query():
     query = typer.prompt("Query")
     response = chat_completions(query)
     print(response)
-    typer.Exit()
 
 
 if __name__ == '__main__':
