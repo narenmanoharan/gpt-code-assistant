@@ -3,7 +3,7 @@ import os
 import readline
 
 import typer
-from rich. import print
+from rich import print
 from rich.console import Console
 
 from core.ai import chat_completions
