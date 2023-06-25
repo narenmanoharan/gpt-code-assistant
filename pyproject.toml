@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gpt-code-search"
-version = "0.0.1"
+version = "0.0.2"
 description = "gpt-code-search enables you to search your codebase with natural language."
 authors = ["narenmanoharan <narenkmanoharan@gmail.com>", "skovy <smiskoviak@gmail.com>"]
 license = "Apache-2.0"
