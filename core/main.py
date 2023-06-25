@@ -7,11 +7,13 @@ from rich.logging import RichHandler
 
 from core.ai import chat_completions
 from core.config import (
-    write_selected_model,
+    save_selected_model,
     update_usage_info,
     CONFIG_FILE_PATH,
-    create_default_config,
+    create_or_update_with_default_config,
+    save_opt_out_of_analytics,
 )
+from core.sentry import configure_sentry
 
 logging.basicConfig(
     level=logging.INFO,
@@ -33,12 +35,8 @@ def check_openai_key():
             "Error: OPENAI_API_KEY is not set in your environment variables.",
             style="bold red",
         )
-        console.print(
-            "To find your API Key, go to: https://platform.openai.com/account/api-keys\n"
-        )
-        console.print(
-            "Once you have the API Key, you can set it in your environment variables like this:"
-        )
+        console.print("To find your API Key, go to: https://platform.openai.com/account/api-keys\n")
+        console.print("Once you have the API Key, you can set it in your environment variables like this:")
         console.print("export OPENAI_API_KEY='your_key'\n", style="bold green")
         return False
     return True
@@ -58,7 +56,7 @@ def select_model():
     if selected_model.isdigit() and int(selected_model) in range(1, len(models) + 1):
         selected_model_name = models[int(selected_model) - 1]
         console.print(f"Selected model: {selected_model_name}")
-        write_selected_model(selected_model_name)
+        save_selected_model(selected_model_name)
     else:
         console.print("Invalid selection. Please enter a valid number.")
         typer.Exit()
@@ -78,11 +76,20 @@ def query(message: str):
     typer.Exit()
 
 
+@app.command()
+def opt_out_of_analytics():
+    """
+    Opt out of anonymous usage analytics and crash reports.
+    """
+    save_opt_out_of_analytics()
+    console.print("You have opted out of anonymous usage analytics and crash reports.")
+
+
 @app.callback()
 def callback():
     if not os.path.exists(CONFIG_FILE_PATH):
         logging.info("Creating default config file...")
-        create_default_config()
+        create_or_update_with_default_config()
 
     console.print(
         "\nTip: Mention specific file names in your query for the best results. "
@@ -92,4 +99,5 @@ def callback():
 
 
 if __name__ == "__main__":
+    configure_sentry()
     app()
