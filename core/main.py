@@ -6,6 +6,12 @@ from rich.console import Console
 from rich.logging import RichHandler
 
 from core.ai import chat_completions
+from core.config import (
+    write_selected_model,
+    update_usage_info,
+    CONFIG_FILE_PATH,
+    create_default_config,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -39,21 +45,50 @@ def check_openai_key():
 
 
 @app.command()
-def query():
+def select_model():
+    """
+    Select the GPT model to use.
+    """
+    models = ["gpt-4-0613", "gpt-3.5-turbo-0613", "gpt-3.5-turbo-16k"]
+    console.print("Available Models:")
+    for index, model in enumerate(models, start=1):
+        console.print(f"{index}. {model}")
+
+    selected_model = typer.prompt("Select a model (enter the number)")
+    if selected_model.isdigit() and int(selected_model) in range(1, len(models) + 1):
+        selected_model_name = models[int(selected_model) - 1]
+        console.print(f"Selected model: {selected_model_name}")
+        write_selected_model(selected_model_name)
+    else:
+        console.print("Invalid selection. Please enter a valid number.")
+        typer.Exit()
+
+
+@app.command()
+def query(message: str):
     """
     Query the current directory with any questions.
     """
     if not check_openai_key():
         return
+
+    response = chat_completions(message)
+    update_usage_info()
+    console.print(response)
+    typer.Exit()
+
+
+@app.callback()
+def callback():
+    if not os.path.exists(CONFIG_FILE_PATH):
+        logging.info("Creating default config file...")
+        create_default_config()
+
     console.print(
         "\nTip: Mention specific file names in your query for the best results. "
         "Run this CLI closer to the directory or file path for faster file tree searches. The max depth is 5 levels.\n",
         style="bold yellow",
     )
-    message = typer.prompt("Query")
-    response = chat_completions(message)
-    console.print(response)
-    typer.Exit()
 
 
 if __name__ == "__main__":

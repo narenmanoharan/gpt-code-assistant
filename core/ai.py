@@ -5,6 +5,7 @@ import openai
 import requests
 from rich.markdown import Markdown
 
+from core.config import load_selected_model
 from core.functions import (
     MAX_DEPTH,
     enabled_functions,
@@ -55,13 +56,13 @@ Let's start assisting with your coding tasks!
 """
 
 
-def chat_completion_request(messages, functions=None, model="gpt-3.5-turbo-16k"):
+def chat_completion_request(messages, functions=None):
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + openai.api_key,
     }
     json_data = {
-        "model": model,
+        "model": load_selected_model(),
         "messages": messages,
         "functions": functions or [],
         "function_call": "auto",
