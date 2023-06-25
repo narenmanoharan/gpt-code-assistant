@@ -31,7 +31,7 @@ pip install gpt-code-search
 #### Ask a question about your codebase
 
 ```bash
-gpt-code-search query "What does this codebase do?"
+gpt-code-search query ""
 ```
 
 #### Select a model
@@ -57,8 +57,8 @@ Examples of the types of questions you might want to ask:
 
 - 🐛 Help debugging errors and finding the relevant code and files
 - 📝 Document large files or functionalities formatted as markdown
-- 📨 Ask general questions about any part of the code
 - 🛠️ Generate new code based on existing files and conventions
+- 📨 Ask general questions about any part of the code
 
 ## Privacy
 

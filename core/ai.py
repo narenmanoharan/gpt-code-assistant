@@ -10,7 +10,6 @@ from core.functions import (
     MAX_DEPTH,
     enabled_functions,
     get_contents_of_file,
-    get_file_tree,
     search_codebase,
     truncate_text_to_token_limit,
 )
@@ -22,37 +21,28 @@ PROMPT = """\
 You're a incredible powered coding assistant. Your role is to help users understand and navigate their codebases,
 providing assistance across a range of tasks.
 
-## Problem
-
-You want to leverage the power of GPT-4 to search your codebase, but you don't want to manually copy and paste
-code snippets into a prompt or send your code to another third-party service.
-
-You help by determine the most relevant code snippets within your codebase. No copying, pasting, or sharing code
-required. It meets you where you already live: in your terminal.
-
-Use cases that you will support out of the box:
-- 📨 Asking general questions about any part of the code
-- 📝 Documenting large files or functionalities in markdown
-- 🛠️ Generating new code based on existing files and conventions
-- 🐛 Debugging errors and finding relevant code and files
-
 You have access to three primary functions:
-- `search_codebase(keywords, start_path, max_depth)`: Search the codebase for a keyword.
-- `get_file_tree(start_path, max_depth)`: Retrieve the project's file structure.
-- `get_contents_of_file(path)`: Fetch the contents of a file.
+- `search_codebase(keywords, max_depth)`: Search the codebase for a keywords with rankings based on the file path
+and contents. Higher ranking is better. Always use this function first. If there are no hits on a query, try some
+different keywords similar to the query. (eg). use interceptor, if interceptors is not found.
+
+
+- `get_contents_of_file(path)`: Fetch the contents of a file. Based on the answer from `search_codebase`, make a
+judgement on the most relevant file and fetch the contents of that file. Read at least 5 files before answering my
+calling this function multiple times. All the files should be different each time.
+
+You have a total of 10 function calls. Use them wisely.
 
 Use these tools to debug, create documentation, answer code-related queries, and generate code snippets
 in line with the project's style. You will always use these functions before answering a question, particularly
-`search_codebase`. You will not answer any questions without using these functions first.
+`search_codebase`. You will not answer any questions without using these functions first. If you cannot find a
+relevant file, say 'I don't know'. If you don't, you will be penalized.
 
-Before answering, search the codebase or file tree. Review at least five files and reference the most relevant one. You
-will not answer any questions without looking up a file first. If you cannot find a relevant file, say 'I don't know'.
-If you don't, you will be penalized. Function calls are capped at ten per session. If a 'readme.md' file exists, start
-there. Otherwise, use file names and content.
+Once you find relevant files with the file tree or search functions, always use `get_contents_of_file` to fetch the
+contents of the file and review the contents of at least three files before answering.
 
-Compose responses in markdown with code when necessary. Aim for thorough answers, and it's okay to say 'I don't know'.
-Your objective is to provide the most accurate and detailed answer possible, even if it results in a longer response.
-Let's start assisting with your coding tasks!
+Compose responses in markdown with code when necessary. Your objective is to provide the most accurate and detailed
+answer possible, even if it results in a longer response. Let's start assisting with your coding tasks!
 """
 
 
@@ -101,21 +91,15 @@ def get_next_completion(previous_response, messages, functions):
     except json.JSONDecodeError:
         return None
 
-    if function_name == "get_file_tree":
-        function_call = get_file_tree
-        start_path = function_args.get("start_path")
-        max_depth = function_args.get("max_depth") or MAX_DEPTH
-        function_response = function_call(start_path, int(max_depth))
-    elif function_name == "get_contents_of_file":
+    if function_name == "get_contents_of_file":
         function_call = get_contents_of_file
         file_path = function_args.get("path")
         function_response = function_call(file_path)
     elif function_name == "search_codebase":
         function_call = search_codebase
         keywords = function_args.get("keywords")
-        start_path = function_args.get("start_path") or "."
         max_depth = function_args.get("max_depth") or MAX_DEPTH
-        function_response = function_call(keywords, start_path, int(max_depth))
+        function_response = function_call(keywords, int(max_depth))
     else:
         raise ValueError(f"Function {function_name} not found.")
 

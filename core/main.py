@@ -65,6 +65,31 @@ def select_model():
 
 
 @app.command()
+def create_alias():
+    """
+    Instructions for creating an alias to gpt-code-search query.
+    """
+    console.print(
+        "To create an alias, you need to edit your shell's configuration file. "
+        "Here are instructions for Bash and Zsh (the most common shells)."
+    )
+    console.print(
+        "\nIf you use Bash, run the following command:\n"
+        "echo \"alias gq='gpt-code-search query'\" >> ~/.bashrc && source ~/.bashrc",
+        style="bold green",
+    )
+    console.print(
+        "\nIf you use Zsh, run the following command:\n"
+        "echo \"alias gq='gpt-code-search query'\" >> ~/.zshrc && source ~/.zshrc",
+        style="bold green",
+    )
+    console.print(
+        "\nAfter running the appropriate command, you can use 'gq' as a shortcut for 'gpt-code-search query'."
+    )
+    typer.Exit()
+
+
+@app.command()
 def query(message: str):
     """
     Query the current directory with any questions.

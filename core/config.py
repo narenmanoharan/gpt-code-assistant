@@ -47,6 +47,8 @@ def save_config(config):
 
 def update_usage_info():
     config = load_config()
+    if config.get("usage") is None:
+        config["usage"] = {"query_count": 0, "last_updated": ""}
     config["usage"]["query_count"] += 1
     config["usage"]["last_updated"] = datetime.utcnow().isoformat()
     save_config(config)
