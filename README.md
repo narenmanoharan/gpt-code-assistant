@@ -71,9 +71,10 @@ This tool utilizes [OpenAI's function calling](https://platform.openai.com/docs/
 The functions currently available for the LLM to call are:
 
 - `search_codebase` - searches the codebase using a TF-IDF vectorizer
+- `get_file_tree` - provides the file tree of the codebase
 - `get_file_contents` - provides the contents of a file
 
-Combining these two functions, we can ask the LLM to search the codebase for a keyword, and then retrieve the contents of the file that contains the keyword. And it's as simple as that!
+Combining these three functions, we can ask the LLM to search the codebase for a keyword, and then retrieve the contents of the file that contains the keyword. And it's as simple as that!
 
 ### Privacy
 
@@ -139,6 +140,11 @@ Install pre-commit hooks
 ```bash
 # Install pre-commit hooks
 poetry run pre-commit install
+```
+
+```bash
+# Setup local development
+export LOCAL_DEV=true
 ```
 
 ## Contributing

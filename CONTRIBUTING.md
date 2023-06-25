@@ -48,6 +48,12 @@ poetry install
 poetry run pre-commit install
 ```
 
+1. Set the environment variable `LOCAL_DEV` to `true` for local development:
+
+```bash
+export LOCAL_DEV=true
+```
+
 1. Run the project:
 
 ```bash

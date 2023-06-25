@@ -197,10 +197,38 @@ def enabled_functions():
                     "max_depth": {
                         "type": "integer",
                         "description": "The maximum depth of the search.",
-                        "default": 5,
+                        "default": MAX_DEPTH,
                     },
                 },
                 "required": ["keywords"],
+            },
+        },
+        {
+            "name": "get_file_tree",
+            "description": "Get the file tree of the project based on the current working directory.",
+            "returns": {
+                "type": "array",
+                "items": {
+                    "type": "string",
+                    "description": "The path to a file in the file tree.",
+                },
+                "description": "List of file paths in the file tree.",
+            },
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "start_path": {
+                        "type": "string",
+                        "description": "The path to start the search from. Defaults to the current directory.",
+                        "default": ".",
+                    },
+                    "max_depth": {
+                        "type": "integer",
+                        "description": "The maximum depth of the search.",
+                        "default": MAX_DEPTH,
+                    },
+                },
+                "required": [],
             },
         },
     ]

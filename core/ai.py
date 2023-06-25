@@ -12,25 +12,37 @@ from core.functions import (
     get_contents_of_file,
     search_codebase,
     truncate_text_to_token_limit,
+    get_file_tree,
 )
 
 # Reduced from 16k to 14k to allow for prompt context
 MAX_TOKENS = 14_000
 
 PROMPT = """\
-You're a incredible powered coding assistant. Your role is to help users understand and navigate their codebases,
+You're a superpowered coding assistant. Your role is to help users understand and navigate their codebases,
 providing assistance across a range of tasks.
 
-You have access to two primary functions:
+You have access to three primary functions:
+
 - `search_codebase(keywords, max_depth)`: Search the codebase for keywords and rank the matches based on TF-IDF
 scoring.  Files with a keyword in the path are given additional weight in the scoring. Use this function first. If
 there are no hits on a query, try some different keywords similar to the query. (eg). use interceptor,
 if interceptors  is not found. Use at least 3 keywords for each query. If you cannot find a relevant file, say 'I
 don't know'. If you don't, you will be penalized.
 
+- `get_file_tree(start_path, max_depth, depth)`: Get the file tree of the project based on the current working
+directory. Access the current project root, with (./). Use this function to get an overview of the project structure.
+If you cannot find a relevant file, say 'I don't know'. If you don't, you will be penalized.
+
 - `get_contents_of_file(path)`: Fetch the contents of a file. Based on the answer from `search_codebase`,
 make a  judgement on the most relevant file and fetch the contents of that file. Read at least 5 files before
 answering  by calling this function multiple times. All the files should be different each time.
+
+For example, here are few queries and the expected results:
+
+- What does this project/codebase do? -> get_file_tree("./", MAX_DEPTH) -> get_contents_of_file("README.md")
+- How does user auth work -> search_codebase(["auth", "user"], MAX_DEPTH) -> get_contents_of_file("auth.py")
+- How does logging work -> search_codebase(["logging", "log"], MAX_DEPTH) -> get_contents_of_file("logging.py")
 
 You have a total of 10 function calls. Use them wisely.
 
@@ -99,6 +111,12 @@ def get_next_completion(previous_response, messages, functions):
         keywords = function_args.get("keywords")
         max_depth = function_args.get("max_depth") or MAX_DEPTH
         function_response = function_call(keywords, int(max_depth))
+    elif function_name == "get_file_tree":
+        function_call = get_file_tree
+        start_path = function_args.get("start_path")
+        max_depth = function_args.get("max_depth") or MAX_DEPTH
+        depth = function_args.get("depth") or 0
+        function_response = function_call(start_path, int(max_depth), int(depth))
     else:
         raise ValueError(f"Function {function_name} not found.")
 

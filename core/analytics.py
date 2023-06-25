@@ -1,3 +1,4 @@
+import os
 from typing import Dict, Any
 
 import posthog
@@ -30,6 +31,8 @@ def configure_sentry(has_opted_out_of_analytics: bool, uuid: str):
 
 
 def send_event(event_name: str, id: str, properties: Dict[str, Any]):
+    if os.getenv("LOCAL_DEV"):
+        return
     posthog.capture(
         distinct_id=id,
         event=event_name,
