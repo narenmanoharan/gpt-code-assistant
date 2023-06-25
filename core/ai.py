@@ -10,6 +10,7 @@ from core.functions import get_file_tree, get_contents_of_file, enabled_function
 # Reduced from 16k to 14k to allow for prompt context
 MAX_TOKENS = 14_000
 
+
 def chat_completion_request(messages, functions=None, model="gpt-3.5-turbo-16k"):
     headers = {
         "Content-Type": "application/json",
@@ -48,7 +49,10 @@ def get_next_completion(previous_response, messages, functions):
         return None
 
     function_name = assistant_message["function_call"]["name"]
-    function_args = json.loads(assistant_message["function_call"]["arguments"])
+    try:
+        function_args = json.loads(assistant_message["function_call"]["arguments"])
+    except json.JSONDecodeError:
+        return None
 
     if function_name == 'get_file_tree':
         function_call = get_file_tree
@@ -94,9 +98,9 @@ Here are some common use-cases:
 3. General Queries: Answer general questions about any part of the code.
 4. Code Generation: Generate new code snippets that adhere to the existing project's style and conventions.
 
-Remember, always lookup the file tree first, before answering any questions. You can call functions a maximum of 10 times per session, so use your calls wisely. Try to lookup at least 5 different files before answering a question, and always reference the most relevant file. If you're unable to find a file or a confident answer, it's okay to say 'I don't know'.
+Remember, always lookup the file tree first, before answering any questions as the first step in answering any question. For high level questions, you can use the 'readme.md' file as a starting point (if it exists). Else, look at the file names and contents to find the most relevant file. You can call functions a maximum of 10 times per session, so use your calls wisely. Try to lookup at least 5 different files before answering a question, and always reference the most relevant file.
 
-Please provide code when necessary and use markdown for the answer.
+Please provide code when necessary and use markdown for the answer. Be as detailed as possible, and try to provide a complete answer. But if you're unable to, it's okay to say 'I don't know'. Do not make up answers.
                 """
              },
             {"role": "user", "content": query}]

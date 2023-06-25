@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "gpt-code-search"
+version = "0.0.1"
+description = "gpt-code-search enables you to search your codebase with natural language."
+authors = ["narenmanoharan <narenkmanoharan@gmail.com>", "skovy <smiskoviak@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+packages = [{include = "core"}]
+homepage = "https://wolfia.com"
+repository = "https://github.com/wolfia-app/gpt-code-search"
+keywords = ["gpt", "code", "search", "wolfia", "gpt4", "llm"]
+
+[tool.poetry.urls]
+issues = "https://github.com/wolfia-app/gpt-code-search/issues"
+discussions = "https://github.com/wolfia-app/gpt-code-search/discussions"
+wiki = "https://github.com/wolfia-app/gpt-code-search/wiki"
+
+[tool.poetry.scripts]
+gpt-code-search = "core.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = {extras = ["all"], version = "^0.9.0"}
+rich = "^13.4.2"
+tiktoken = "^0.4.0"
+openai = "^0.27.8"
+termcolor = "^2.3.0"
+requests = "^2.31.0"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.15.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
