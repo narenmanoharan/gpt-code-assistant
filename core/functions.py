@@ -1,19 +1,42 @@
 import logging
 import os
 import re
-from typing import Union, List, Any
+from typing import List, Union
 
 import tiktoken
 
-IGNORED_FOLDERS = ['__pycache__', '.git', '.idea', 'node_modules', '.bundle', '.gradle', 'build', '.DS_Store',
-                   '.ipynb_checkpoints']
-IGNORED_FILES = ['package-lock.json', '.env', 'Gemfile.lock', 'yarn.lock', '*.pyc', 'local.properties', '*.xcodeproj',
-                 '*.xcworkspace', '*.csv', '*.xlsx', '*.json', '.bat']
+IGNORED_FOLDERS = [
+    "__pycache__",
+    ".git",
+    ".idea",
+    "node_modules",
+    ".bundle",
+    ".gradle",
+    "build",
+    ".DS_Store",
+    ".ipynb_checkpoints",
+]
+IGNORED_FILES = [
+    "package-lock.json",
+    ".env",
+    "Gemfile.lock",
+    "yarn.lock",
+    "*.pyc",
+    "local.properties",
+    "*.xcodeproj",
+    "*.xcworkspace",
+    "*.csv",
+    "*.xlsx",
+    "*.json",
+    ".bat",
+]
 
 MAX_DEPTH = 5
 
 
-def get_file_tree(start_path: str = ".", max_depth: int = MAX_DEPTH, depth: int = 0) -> list:
+def get_file_tree(
+    start_path: str = ".", max_depth: int = MAX_DEPTH, depth: int = 0
+) -> list:
     """
     Get the file tree of the project based on the current working directory.
     :param start_path: The path to the directory to start the search from.
@@ -35,7 +58,9 @@ def get_file_tree(start_path: str = ".", max_depth: int = MAX_DEPTH, depth: int 
     return tree
 
 
-def search_codebase(keywords: List[str], start_path: str = '.', max_depth: int = 5) -> List[str]:
+def search_codebase(
+    keywords: List[str], start_path: str = ".", max_depth: int = 5
+) -> List[str]:
     """
     Search the codebase for a given list of keywords.
     :param keywords: The list of keywords to search for.
@@ -48,16 +73,18 @@ def search_codebase(keywords: List[str], start_path: str = '.', max_depth: int =
 
     for file_path in file_tree:
         try:
-            with open(file_path, 'r', errors='ignore') as file:
+            with open(file_path, "r", errors="ignore") as file:
                 contents = file.read()
 
             if any(re.search(keyword, contents, re.IGNORECASE) for keyword in keywords):
                 matching_files.add(file_path)
         except Exception:
-            pass
+            logging.error("Error reading file: {}".format(file_path))
 
     logging.info("Searching for keywords: {}".format(keywords))
-    logging.info("Found {} matching files in {}.".format(len(matching_files), start_path))
+    logging.info(
+        "Found {} matching files in {}.".format(len(matching_files), start_path)
+    )
     logging.info("Matching files: {}".format(matching_files))
     return list(matching_files)
 
@@ -69,7 +96,7 @@ def get_contents_of_file(file_path: str) -> str:
     :return: The contents of the file, or an empty string if the file is not found.
     """
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, "r") as file:
             logging.info("Reading file: {}".format(file_path))
             return file.read()
     except FileNotFoundError:
@@ -89,20 +116,20 @@ def truncate_text_to_token_limit(text: Union[str, List[str]], max_tokens: int):
     :return: The truncated text or list of strings.
     """
     if isinstance(text, str):
-        chunks = text.split(' ')
+        chunks = text.split(" ")
     elif isinstance(text, list):
         chunks = text
     else:
         raise ValueError("The input text should be a string or a list of strings.")
 
-    total_tokens = sum(len(chunk.split(' ')) for chunk in chunks)
+    total_tokens = sum(len(chunk.split(" ")) for chunk in chunks)
 
     while total_tokens > max_tokens:
-        total_tokens -= len(chunks[-1].split(' '))
+        total_tokens -= len(chunks[-1].split(" "))
         chunks = chunks[:-1]
 
     if isinstance(text, str):
-        return ' '.join(chunks)
+        return " ".join(chunks)
     else:
         return chunks
 
@@ -111,7 +138,8 @@ def enabled_functions():
     return [
         {
             "name": "get_file_tree",
-            "description": "Get the file tree of the project based on the current working directory. Access the current project root, with (./)",
+            "description": "Get the file tree of the project based on the current working directory. "
+            "Access the current project root, with (./)",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -122,13 +150,16 @@ def enabled_functions():
                     },
                     "max_depth": {
                         "type": "string",
-                        "description": "The maximum depth of the search. Use a max of {} since the search is very slow.".format(MAX_DEPTH),
+                        "description": "The maximum depth of the search."
+                        "Use a max of {} since the search is very slow.".format(
+                            MAX_DEPTH
+                        ),
                     },
                     "depth": {
                         "type": "string",
                         "description": "The current depth of the search.",
                         "default": "0",
-                    }
+                    },
                 },
                 "required": ["start_path", "max_depth"],
             },
@@ -141,11 +172,11 @@ def enabled_functions():
                 "properties": {
                     "path": {
                         "type": "string",
-                        "description": "The path to the file."
+                        "description": "The path to the file.",
                     },
                 },
                 "required": ["path"],
-            }
+            },
         },
         {
             "name": "search_codebase",
@@ -156,7 +187,7 @@ def enabled_functions():
                     "keywords": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "description": "The list of keywords to search for. Format: ['keyword1', 'keyword2']"
+                        "description": "The list of keywords to search for. Format: ['keyword1', 'keyword2']",
                     },
                     "start_path": {
                         "type": "string",
@@ -167,9 +198,9 @@ def enabled_functions():
                         "type": "string",
                         "description": "The maximum depth of the search.",
                         "default": "5",
-                    }
+                    },
                 },
                 "required": ["keywords"],
-            }
+            },
         },
     ]

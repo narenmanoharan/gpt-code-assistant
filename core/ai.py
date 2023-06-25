@@ -5,8 +5,14 @@ import openai
 import requests
 from rich.markdown import Markdown
 
-from core.functions import get_file_tree, get_contents_of_file, enabled_functions, truncate_text_to_token_limit, \
-    search_codebase, MAX_DEPTH
+from core.functions import (
+    MAX_DEPTH,
+    enabled_functions,
+    get_contents_of_file,
+    get_file_tree,
+    search_codebase,
+    truncate_text_to_token_limit,
+)
 
 # Reduced from 16k to 14k to allow for prompt context
 MAX_TOKENS = 14_000
@@ -29,7 +35,7 @@ def chat_completion_request(messages, functions=None, model="gpt-3.5-turbo-16k")
             "https://api.openai.com/v1/chat/completions",
             headers=headers,
             json=json_data,
-            timeout=180
+            timeout=180,
         )
         return response
     except requests.exceptions.HTTPError as http_err:
@@ -37,7 +43,9 @@ def chat_completion_request(messages, functions=None, model="gpt-3.5-turbo-16k")
         logging.error(f"Response content: {response.content}")
         return http_err
     except Exception as e:
-        logging.error("Unable to generate ChatCompletion response due to the following exception:")
+        logging.error(
+            "Unable to generate ChatCompletion response due to the following exception:"
+        )
         logging.error(f"Exception: {e}")
         return e
 
@@ -55,20 +63,20 @@ def get_next_completion(previous_response, messages, functions):
     except json.JSONDecodeError:
         return None
 
-    if function_name == 'get_file_tree':
+    if function_name == "get_file_tree":
         function_call = get_file_tree
-        start_path = function_args.get('start_path')
-        max_depth = function_args.get('max_depth') or MAX_DEPTH
+        start_path = function_args.get("start_path")
+        max_depth = function_args.get("max_depth") or MAX_DEPTH
         function_response = function_call(start_path, int(max_depth))
-    elif function_name == 'get_contents_of_file':
+    elif function_name == "get_contents_of_file":
         function_call = get_contents_of_file
-        file_path = function_args.get('path')
+        file_path = function_args.get("path")
         function_response = function_call(file_path)
-    elif function_name == 'search_codebase':
+    elif function_name == "search_codebase":
         function_call = search_codebase
-        keywords = function_args.get('keywords')
-        start_path = function_args.get('start_path') or '.'
-        max_depth = function_args.get('max_depth') or MAX_DEPTH
+        keywords = function_args.get("keywords")
+        start_path = function_args.get("start_path") or "."
+        max_depth = function_args.get("max_depth") or MAX_DEPTH
         function_response = function_call(keywords, start_path, int(max_depth))
     else:
         raise ValueError(f"Function {function_name} not found.")
@@ -89,30 +97,40 @@ def get_next_completion(previous_response, messages, functions):
     return next_response
 
 
+content = """\
+You're a GPT-4 powered coding assistant. Your role involves helping users understand and navigate their codebases,
+providing assistance across a range of tasks.
+
+You have access to two primary functions:
+- `get_file_tree(start_path, max_depth)`: This function retrieves the project's file structure.
+- `get_contents_of_file(path)`: This function fetches the contents of a given file.
+- `search_codebase(keywords, start_path, max_depth)`: This function searches the codebase for a given keyword.
+
+Leverage these tools to help with debugging, creating documentation, answering code-related queries, and generating
+code snippets in line with the project's existing style and conventions.
+
+Before answering any questions, always perform a search of the codebase or file tree. Aim to review at least five
+different files before providing an answer and make sure to reference the most relevant file.
+
+Your function calls are capped at ten per session, so make judicious use of them. If a 'readme.md' file exists, it can
+serve as a starting point for high-level queries. If it doesn't, rely on file names and content to gather the necessary
+information.
+
+When composing your responses, use markdown for clarity and include code where necessary. Always aim for thorough,
+complete answers, but if you're unsure, it's better to admit it rather than providing incorrect information.
+"""
+
+
 def chat_completions(query: str):
     while True:
         functions = enabled_functions()
         messages = [
-            {"role": "system",
-             "content": """You are an advanced coding assistant powered by GPT-4. Your task is to assist users in understanding and navigating their codebases, helping them with a variety of tasks, all based on the provided context.
-
-You have access to two powerful functions: get_file_tree(start_path, max_depth) and get_contents_of_file(path). The former returns the project's file tree, while the latter retrieves the contents of a specified file.
-
-Here are some common use-cases:
-
-1. Debugging: Help users debug errors by finding the relevant files and code snippets.
-2. Documentation: Generate well-structured documentation for large files or functionalities.
-3. General Queries: Answer general questions about any part of the code.
-4. Code Generation: Generate new code snippets that adhere to the existing project's style and conventions.
-
-Remember, always lookup the file tree or search the codebase first, before answering any questions as the first step in answering any question. Create keywords from the question and search the codebase or user the file tree to find the most relevant file. 
-
-For high level questions, you can use the 'readme.md' file as a starting point (if it exists). Else, look at the file names and contents to find the most relevant file. You can call functions a maximum of 10 times per session, so use your calls wisely. Try to lookup at least 5 different files before answering a question, and always reference the most relevant file.
-
-Please provide code when necessary and use markdown for the answer. Be as detailed as possible, and try to provide a complete answer. But if you're unable to, it's okay to say 'I don't know'. Do not make up answers.
-                """
-             },
-            {"role": "user", "content": query}]
+            {
+                "role": "system",
+                "content": content,
+            },
+            {"role": "user", "content": query},
+        ]
 
         response = chat_completion_request(messages, functions)
         max_recursion = 10
