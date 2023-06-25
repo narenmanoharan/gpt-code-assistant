@@ -31,13 +31,13 @@ pip install gpt-code-search
 #### Ask a question about your codebase
 
 ```bash
-gpt-code-search query ""
+gcs query ""
 ```
 
 #### Select a model
 
 ```bash
-gpt-code-search select-model
+gcs select-model
 ```
 
 Defaults to `gpt-3.5-turbo-16k`. The selected model is stored in `~/$HOME/.gpt-code-search/config.toml`.

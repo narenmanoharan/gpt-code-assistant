@@ -71,9 +71,7 @@ def chat_completion_request(messages, functions=None):
         logging.error(f"Response content: {response.content}")
         return http_err
     except Exception as e:
-        logging.error(
-            "Unable to generate ChatCompletion response due to the following exception:"
-        )
+        logging.error("Unable to generate ChatCompletion response due to the following exception:")
         logging.error(f"Exception: {e}")
         return e
 
