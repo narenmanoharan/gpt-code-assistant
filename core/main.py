@@ -96,7 +96,7 @@ def callback():
 
     console.print(
         "\nTip: Mention specific file names in your query for the best results. "
-        "Run this CLI closer to the directory or file path for faster file tree searches. The max depth is 5 levels.\n",
+        "Run this CLI closer to the directory or file for more accurate answers. The max depth is 5 levels.\n",
         style="bold yellow",
     )
     if not os.getenv("LOCAL_DEV"):

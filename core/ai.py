@@ -7,7 +7,6 @@ from rich.markdown import Markdown
 
 from core.config import load_selected_model
 from core.functions import (
-    MAX_DEPTH,
     enabled_functions,
     get_contents_of_file,
     search_codebase,
@@ -40,9 +39,9 @@ answering  by calling this function multiple times. All the files should be diff
 
 For example, here are few queries and the expected results:
 
-- What does this project/codebase do? -> get_file_tree("./", MAX_DEPTH) -> get_contents_of_file("README.md")
-- How does user auth work -> search_codebase(["auth", "user"], MAX_DEPTH) -> get_contents_of_file("auth.py")
-- How does logging work -> search_codebase(["logging", "log"], MAX_DEPTH) -> get_contents_of_file("logging.py")
+- What does this project/codebase do? -> get_file_tree("./") -> get_contents_of_file("README.md")
+- How does user auth work -> search_codebase(["auth", "user"]) -> get_contents_of_file("auth.py")
+- How does logging work -> search_codebase(["logging", "log"]) -> get_contents_of_file("logging.py")
 
 You have a total of 10 function calls. Use them wisely.
 
@@ -109,14 +108,11 @@ def get_next_completion(previous_response, messages, functions):
     elif function_name == "search_codebase":
         function_call = search_codebase
         keywords = function_args.get("keywords")
-        max_depth = function_args.get("max_depth") or MAX_DEPTH
-        function_response = function_call(keywords, int(max_depth))
+        function_response = function_call(keywords)
     elif function_name == "get_file_tree":
         function_call = get_file_tree
         start_path = function_args.get("start_path")
-        max_depth = function_args.get("max_depth") or MAX_DEPTH
-        depth = function_args.get("depth") or 0
-        function_response = function_call(start_path, int(max_depth), int(depth))
+        function_response = function_call(start_path)
     else:
         raise ValueError(f"Function {function_name} not found.")
 

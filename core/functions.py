@@ -9,6 +9,8 @@ IGNORED_FOLDERS = [
     "__pycache__",
     ".git",
     ".idea",
+    ".vscode",
+    "venv",
     "node_modules",
     ".bundle",
     ".gradle",
@@ -31,7 +33,7 @@ IGNORED_FILES = [
     ".bat",
 ]
 
-MAX_DEPTH = 10
+MAX_DEPTH = 5
 
 
 def get_file_tree(start_path: str = ".", max_depth: int = MAX_DEPTH, depth: int = 0) -> list:
@@ -138,12 +140,15 @@ def truncate_text_to_token_limit(data: Union[str, List[str], List[Tuple[str, int
         chunks = chunks[:-1]
 
     if isinstance(data, str):
-        return " ".join(chunks)
+        truncated_text = " ".join(chunks)[:max_tokens]
+        return truncated_text
     elif data and isinstance(data[0], tuple):
         ranks = [item[1] for item in data[: len(chunks)]]
-        return list(zip(chunks, ranks))
+        truncated_list = list(zip(chunks, ranks))
+        return truncated_list
     else:
-        return chunks
+        truncated_list = chunks[:max_tokens]
+        return truncated_list
 
 
 def enabled_functions():
@@ -194,11 +199,6 @@ def enabled_functions():
                         "description": "The list of keywords to search for. Format: ['keyword1', 'keyword2']. Please "
                         "provide at least three keywords.",
                     },
-                    "max_depth": {
-                        "type": "integer",
-                        "description": "The maximum depth of the search.",
-                        "default": MAX_DEPTH,
-                    },
                 },
                 "required": ["keywords"],
             },
@@ -221,11 +221,6 @@ def enabled_functions():
                         "type": "string",
                         "description": "The path to start the search from. Defaults to the current directory.",
                         "default": ".",
-                    },
-                    "max_depth": {
-                        "type": "integer",
-                        "description": "The maximum depth of the search.",
-                        "default": MAX_DEPTH,
                     },
                 },
                 "required": [],
