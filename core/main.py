@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import datetime
 
 import typer
 from rich.console import Console
@@ -8,12 +9,12 @@ from rich.logging import RichHandler
 from core.ai import chat_completions
 from core.config import (
     save_selected_model,
-    update_usage_info,
+    log_usage_info,
     CONFIG_FILE_PATH,
     create_or_update_with_default_config,
     save_opt_out_of_analytics,
+    configure_deps,
 )
-from core.sentry import configure_sentry
 
 logging.basicConfig(
     level=logging.INFO,
@@ -70,8 +71,10 @@ def query(message: str):
     if not check_openai_key():
         return
 
+    start_time = datetime.utcnow()
     response = chat_completions(message)
-    update_usage_info()
+    end_time = datetime.utcnow()
+    log_usage_info(start_time, end_time)
     console.print(response)
     typer.Exit()
 
@@ -99,5 +102,5 @@ def callback():
 
 
 if __name__ == "__main__":
-    configure_sentry()
+    configure_deps()
     app()

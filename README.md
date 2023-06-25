@@ -31,7 +31,11 @@ pip install gpt-code-search
 #### Ask a question about your codebase
 
 ```bash
-gcs query ""
+gcs query "What does this codebase do?"
+
+gcs query "Can you generate a test for analytics.py?" # Note: Mentioning the file name is advised to improve accuracy
+
+gcs query "How do I use the analytics module?" # Note: Mentioning keywords to search across the codebase is advised to improve accuracy
 ```
 
 #### Select a model
@@ -71,6 +75,27 @@ The only data sent to LLM is the question you ask and the code snippets that is 
 This tool is a simplified version of [Wolfia Codex](https://wolfia.com), a cloud tool that enables you to ask any question about open source and private code bases like [`Langchain`](https://wolfia.com/?projectId=2b964031-0ce8-472a-abb7-27079a7b84f3), [`Vercel ai`](https://wolfia.com/?projectId=4710df1f-43f8-4d30-863b-d67876ae0f06), or [`gpt-engineer`](https://wolfia.com/?projectId=8d9dd449-da2d-410e-a4fc-f2ff75a30f73).
 
 If you're looking for a more powerful tool, or avoiding the setup, check out [Wolfia Codex](https://wolfia.com), search codebases, share your questions and answers, and more!
+
+## Analytics
+
+We collect anonymous crash and usage data to help us improve the tool. You can opt out of analytics by running:
+
+```bash
+gcs opt-out-of-analytics
+```
+
+You can check the data that by looking at the [analytics](core/analytics.py) and [config](core/config.py) files.
+
+Here's an exhaustive list of the data we collect:
+
+```
+- exception - stacktraces of crashes
+- uuid - a unique identifier for the user
+- model - the model used for the query
+- usage - the type of usage (query_count, query_at, query_execution_time)
+```
+
+**Note: We do not collect any PII (ip-address), queries or code snippets.**
 
 ## Development
 
