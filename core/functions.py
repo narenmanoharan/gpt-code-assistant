@@ -124,31 +124,29 @@ def truncate_text_to_token_limit(data: Union[str, List[str], List[Tuple[str, int
         return []
 
     if isinstance(data, str):
-        chunks = data.split(" ")
+        tokens = data.split(" ")
     elif isinstance(data, list):
         if data and isinstance(data[0], tuple):
-            chunks = [item[0] for item in data]
+            tokens = [item[0] for item in data]
         else:
-            chunks = data
+            tokens = data
     else:
         raise ValueError("The input data should be a string or a list of strings or a list of tuples.")
 
-    total_tokens = sum(len(chunk.split(" ")) for chunk in chunks)
+    total_tokens = len(tokens)
 
-    while total_tokens > max_tokens:
-        total_tokens -= len(chunks[-1].split(" "))
-        chunks = chunks[:-1]
+    if total_tokens <= max_tokens:
+        return data
 
+    truncated_tokens = tokens[:max_tokens]
     if isinstance(data, str):
-        truncated_text = " ".join(chunks)[:max_tokens]
-        return truncated_text
+        truncated_data = " ".join(truncated_tokens)
     elif data and isinstance(data[0], tuple):
-        ranks = [item[1] for item in data[: len(chunks)]]
-        truncated_list = list(zip(chunks, ranks))
-        return truncated_list
+        ranks = [item[1] for item in data[:max_tokens]]
+        truncated_data = list(zip(truncated_tokens, ranks))
     else:
-        truncated_list = chunks[:max_tokens]
-        return truncated_list
+        truncated_data = truncated_tokens
+    return truncated_data
 
 
 def enabled_functions():
@@ -223,7 +221,7 @@ def enabled_functions():
                         "default": ".",
                     },
                 },
-                "required": [],
+                "required": ["start_path"],
             },
         },
     ]
