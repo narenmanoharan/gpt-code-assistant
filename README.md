@@ -34,7 +34,7 @@ gpt-code-search
 
 ### Configuration
 
-The tool will prompt you to configure the `OPENAI_API_KEY`, if you haven't already. 
+The tool will prompt you to configure the `OPENAI_API_KEY`, if you haven't already.
 
 ## Problem
 
@@ -75,6 +75,13 @@ Run the project
 ```bash
 # Run the project
 poetry run python core/main.py
+```
+
+Install pre-commit hooks
+
+```bash
+# Install pre-commit hooks
+poetry run pre-commit install
 ```
 
 ## Contact

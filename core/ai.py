@@ -5,7 +5,8 @@ import openai
 import requests
 from rich.markdown import Markdown
 
-from core.functions import get_file_tree, get_contents_of_file, enabled_functions, truncate_text_to_token_limit
+from core.functions import get_file_tree, get_contents_of_file, enabled_functions, truncate_text_to_token_limit, \
+    search_codebase, MAX_DEPTH
 
 # Reduced from 16k to 14k to allow for prompt context
 MAX_TOKENS = 14_000
@@ -57,12 +58,18 @@ def get_next_completion(previous_response, messages, functions):
     if function_name == 'get_file_tree':
         function_call = get_file_tree
         start_path = function_args.get('start_path')
-        max_depth = int(function_args.get('max_depth'))
-        function_response = function_call(start_path, max_depth)
+        max_depth = function_args.get('max_depth') or MAX_DEPTH
+        function_response = function_call(start_path, int(max_depth))
     elif function_name == 'get_contents_of_file':
         function_call = get_contents_of_file
         file_path = function_args.get('path')
         function_response = function_call(file_path)
+    elif function_name == 'search_codebase':
+        function_call = search_codebase
+        keywords = function_args.get('keywords')
+        start_path = function_args.get('start_path') or '.'
+        max_depth = function_args.get('max_depth') or MAX_DEPTH
+        function_response = function_call(keywords, start_path, int(max_depth))
     else:
         raise ValueError(f"Function {function_name} not found.")
 
@@ -98,7 +105,9 @@ Here are some common use-cases:
 3. General Queries: Answer general questions about any part of the code.
 4. Code Generation: Generate new code snippets that adhere to the existing project's style and conventions.
 
-Remember, always lookup the file tree first, before answering any questions as the first step in answering any question. For high level questions, you can use the 'readme.md' file as a starting point (if it exists). Else, look at the file names and contents to find the most relevant file. You can call functions a maximum of 10 times per session, so use your calls wisely. Try to lookup at least 5 different files before answering a question, and always reference the most relevant file.
+Remember, always lookup the file tree or search the codebase first, before answering any questions as the first step in answering any question. Create keywords from the question and search the codebase or user the file tree to find the most relevant file. 
+
+For high level questions, you can use the 'readme.md' file as a starting point (if it exists). Else, look at the file names and contents to find the most relevant file. You can call functions a maximum of 10 times per session, so use your calls wisely. Try to lookup at least 5 different files before answering a question, and always reference the most relevant file.
 
 Please provide code when necessary and use markdown for the answer. Be as detailed as possible, and try to provide a complete answer. But if you're unable to, it's okay to say 'I don't know'. Do not make up answers.
                 """

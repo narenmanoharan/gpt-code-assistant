@@ -1,5 +1,7 @@
+import logging
 import os
-from typing import Union, List
+import re
+from typing import Union, List, Any
 
 import tiktoken
 
@@ -8,8 +10,10 @@ IGNORED_FOLDERS = ['__pycache__', '.git', '.idea', 'node_modules', '.bundle', '.
 IGNORED_FILES = ['package-lock.json', '.env', 'Gemfile.lock', 'yarn.lock', '*.pyc', 'local.properties', '*.xcodeproj',
                  '*.xcworkspace', '*.csv', '*.xlsx', '*.json', '.bat']
 
+MAX_DEPTH = 5
 
-def get_file_tree(start_path: str, max_depth: int, depth: int = 0) -> list:
+
+def get_file_tree(start_path: str = ".", max_depth: int = MAX_DEPTH, depth: int = 0) -> list:
     """
     Get the file tree of the project based on the current working directory.
     :param start_path: The path to the directory to start the search from.
@@ -31,6 +35,33 @@ def get_file_tree(start_path: str, max_depth: int, depth: int = 0) -> list:
     return tree
 
 
+def search_codebase(keywords: List[str], start_path: str = '.', max_depth: int = 5) -> List[str]:
+    """
+    Search the codebase for a given list of keywords.
+    :param keywords: The list of keywords to search for.
+    :param start_path: The path to the directory to start the search from.
+    :param max_depth: The maximum depth of the search.
+    :return: A list of file paths that contain any of the keywords.
+    """
+    file_tree = get_file_tree(start_path, max_depth)
+    matching_files = set()
+
+    for file_path in file_tree:
+        try:
+            with open(file_path, 'r', errors='ignore') as file:
+                contents = file.read()
+
+            if any(re.search(keyword, contents, re.IGNORECASE) for keyword in keywords):
+                matching_files.add(file_path)
+        except Exception:
+            pass
+
+    logging.info("Searching for keywords: {}".format(keywords))
+    logging.info("Found {} matching files in {}.".format(len(matching_files), start_path))
+    logging.info("Matching files: {}".format(matching_files))
+    return list(matching_files)
+
+
 def get_contents_of_file(file_path: str) -> str:
     """
     Get the contents of a file.
@@ -39,6 +70,7 @@ def get_contents_of_file(file_path: str) -> str:
     """
     try:
         with open(file_path, 'r') as file:
+            logging.info("Reading file: {}".format(file_path))
             return file.read()
     except FileNotFoundError:
         return ""
@@ -85,11 +117,12 @@ def enabled_functions():
                 "properties": {
                     "start_path": {
                         "type": "string",
-                        "description": "The path to the directory to start the search from."
+                        "description": "The path to the directory to start the search from.",
+                        "default": ".",
                     },
                     "max_depth": {
                         "type": "string",
-                        "description": "The maximum depth of the search. Use a max of 3 since the search is very slow.",
+                        "description": "The maximum depth of the search. Use a max of {} since the search is very slow.".format(MAX_DEPTH),
                     },
                     "depth": {
                         "type": "string",
@@ -112,6 +145,31 @@ def enabled_functions():
                     },
                 },
                 "required": ["path"],
+            }
+        },
+        {
+            "name": "search_codebase",
+            "description": "Search the codebase for a given list of keywords.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "keywords": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "The list of keywords to search for. Format: ['keyword1', 'keyword2']"
+                    },
+                    "start_path": {
+                        "type": "string",
+                        "description": "The path to the directory to start the search from.",
+                        "default": ".",
+                    },
+                    "max_depth": {
+                        "type": "string",
+                        "description": "The maximum depth of the search.",
+                        "default": "5",
+                    }
+                },
+                "required": ["keywords"],
             }
         },
     ]
