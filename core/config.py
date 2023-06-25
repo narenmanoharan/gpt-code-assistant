@@ -48,14 +48,14 @@ def load_selected_model():
 
 
 def log_usage_info(start_time, end_time):
-    if has_opted_out_of_analytics():
-        return
     config = load_config()
     config["usage"]["query_count"] += 1
     config["usage"]["query_at"] = datetime.utcnow().isoformat()
     execution_time = (end_time - start_time).total_seconds()
     config["usage"]["query_execution_time"] = execution_time
     save_config(config)
+    if has_opted_out_of_analytics():
+        return
     send_event("query", config["id"], config["usage"])
 
 

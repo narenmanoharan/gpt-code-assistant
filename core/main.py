@@ -99,8 +99,8 @@ def callback():
         "Run this CLI closer to the directory or file path for faster file tree searches. The max depth is 5 levels.\n",
         style="bold yellow",
     )
+    configure_deps()
 
 
 if __name__ == "__main__":
-    configure_deps()
     app()
