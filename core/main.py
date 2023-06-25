@@ -1,24 +1,21 @@
 import logging
 import os
-import readline
 
 import typer
-from rich import print
 from rich.console import Console
-from termcolor import colored
+from rich.logging import RichHandler
 
 from core.ai import chat_completions
 
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO,
+    format="%(message)s",
+    datefmt="[%X]",
+    handlers=[RichHandler(rich_tracebacks=True, markup=True)],
 )
 
 app = typer.Typer()
 console = Console()
-
-CONFIG_FILE_PATH = os.path.expanduser("~/.wolfia_codex")
-
-readline.parse_and_bind("tab: complete")
 
 
 def check_openai_key():
@@ -26,19 +23,17 @@ def check_openai_key():
     Check if the OPENAI_API_KEY environment variable is set. If not, guide the user on where to find it.
     """
     if "OPENAI_API_KEY" not in os.environ:
-        print(
-            colored(
-                "Error: OPENAI_API_KEY is not set in your environment variables.",
-                "red",
-            )
+        console.print(
+            "Error: OPENAI_API_KEY is not set in your environment variables.",
+            style="bold red",
         )
-        print(
+        console.print(
             "To find your API Key, go to: https://platform.openai.com/account/api-keys\n"
         )
-        print(
+        console.print(
             "Once you have the API Key, you can set it in your environment variables like this:"
         )
-        print(colored("export OPENAI_API_KEY='your_key'\n", "green"))
+        console.print("export OPENAI_API_KEY='your_key'\n", style="bold green")
         return False
     return True
 
@@ -50,11 +45,16 @@ def query():
     """
     if not check_openai_key():
         return
-    query = typer.prompt("Query")
-    response = chat_completions(query)
-    print(response)
+    console.print(
+        "\nTip: Mention specific file names in your query for the best results. "
+        "Run this CLI closer to the directory or file path for faster file tree searches. The max depth is 5 levels.\n",
+        style="bold yellow",
+    )
+    message = typer.prompt("Query")
+    response = chat_completions(message)
+    console.print(response)
+    typer.Exit()
 
 
 if __name__ == "__main__":
-    console = Console()
     app()
