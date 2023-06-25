@@ -1,0 +1,44 @@
+name: Lint
+
+on:
+  push:
+    branches: [ main, '*/*' ]
+  pull_request:
+    branches: [ main, '*/*' ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/pypoetry
+            .venv
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/pyproject.toml') }}
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install poetry
+
+      - name: Install dependencies
+        run: |
+          source .venv/bin/activate
+          poetry install
+
+      - name: Run linter
+        run: |
+          source .venv/bin/activate
+          poetry run pre-commit run --all-files
