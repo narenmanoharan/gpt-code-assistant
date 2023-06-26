@@ -19,7 +19,7 @@ wiki = "https://github.com/wolfia-app/gpt-code-search/wiki"
 gcs = "core.main:app"
 
 [tool.poetry.dependencies]
-python = "^3.9.17"
+python = "^3.8.17"
 typer = {extras = ["all"], version = "^0.9.0"}
 rich = "^13.4.2"
 tiktoken = "^0.4.0"
