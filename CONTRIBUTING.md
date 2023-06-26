@@ -34,7 +34,7 @@ git clone https://github.com/YOUR-GITHUB-USERNAME/gpt-code-search.git
 cd gpt-code-search
 ```
 
-1. Install poetry using the instructions here: https://python-poetry.org/docs/#installing-with-the-official-installer
+1. Install poetry using the instructions here: https://python-poetry.org/docs/#installing-with-the-official-installer. The project uses [poetry](https://python-poetry.org/) for dependency management and packaging.
 
 1. Install dependencies:
 

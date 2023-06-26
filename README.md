@@ -86,11 +86,20 @@ The only data sent to LLM is the question you ask and the code snippets that it 
 
 This does have some limitations, namely:
 
-- The LLM is unable to search and load context across mutliple files at once. This means that if you ask a question that requires context from multiple files, you will need to ask multiple questions.
+- The LLM is unable to load context across multiple files at once. This means that if you ask a question that requires context from multiple files, you will need to ask multiple questions.
 - Specify the file name and keywords in your question to improve accuracy. For example, if you want to ask a question about `analytics.py`, mention the file name in your question.
 - The level of search and retrieval is limited by the context window, which refers to the scope of the search conducted by the tool, meaning that we can only search 5 levels deep in the file system. So you need to run the tool from the folder/package closest to the code you want to search.
 
 These limitations lead to suboptimal results in a few cases, but we're working on improving this. **We wanted to get this tool out there as soon as possible to get feedback and iterate on it!**
+
+## Roadmap
+
+- [ ] Use vector embeddings to improve search and retrieval
+- [ ] Add support for generating code and saving it to a file
+- [ ] Support for searching across multiple codebases
+- [ ] Allow the model to create new functions that it can then execute
+- [ ] Use [guidance](https://github.com/microsoft/guidance) to improve prompts
+- [ ] Add support for additional models (Claude, Bedrock, etc)
 
 ## Wolfia Codex
 
@@ -118,34 +127,6 @@ Here's an exhaustive list of the data we collect:
 ```
 
 **Note: We do not collect any PII (ip-address), queries or code snippets.**
-
-## Development
-
-The project uses [poetry](https://python-poetry.org/) for dependency management and packaging. The codebase is structured in a modular fashion, making it easier for contributions. To get started, install poetry and run the following commands:
-
-```bash
-# Install dependencies
-poetry install
-```
-
-Run the project
-
-```bash
-# Run the project
-poetry run python core/main.py
-```
-
-Install pre-commit hooks
-
-```bash
-# Install pre-commit hooks
-poetry run pre-commit install
-```
-
-```bash
-# Setup local development
-export LOCAL_DEV=true
-```
 
 ## Contributing
 
