@@ -1,4 +1,5 @@
 import pytest
+
 from core.functions import truncate_text_to_token_limit, count_tokens
 
 
@@ -8,21 +9,21 @@ def max_tokens():
 
 
 @pytest.mark.parametrize(
-    "data, expected",
+    "data",
     [
-        ("", True),
-        ("This is a long string with many tokens", True),
-        (["This", "is", "a", "sample", "sentence", "and", "this", "is", "another"], True),
-        ([("This", 1), ("is", 2), ("a", 3), ("sample", 4), ("sentence", 5), ("and", 6), ("this", 7), ("is", 8)], True),
-        ("This", True),
-        (["T", "h", "i", "s"], True),
-        ([("T", 1), ("h", 2), ("i", 3), ("s", 4)], True),
-        ("This is a string with special chars!@#", True),
+        "",
+        "This is a long string with many tokens",
+        (["This", "is", "a", "sample", "sentence", "and", "this", "is", "another"]),
+        ([("This", 1), ("is", 2), ("a", 3), ("sample", 4), ("sentence", 5), ("and", 6), ("this", 7), ("is", 8)]),
+        "This",
+        (["T", "h", "i", "s"]),
+        ([("T", 1), ("h", 2), ("i", 3), ("s", 4)]),
+        "This is a string with special chars!@#",
     ],
 )
-def test_truncate_text_to_token_limit(data, expected, max_tokens):
+def test_truncate_text_to_token_limit(data, max_tokens):
     result = truncate_text_to_token_limit(data, max_tokens)
-    assert (count_tokens(result) <= max_tokens) == expected
+    assert count_tokens(result) <= max_tokens
 
 
 def test_truncate_text_invalid_data_type_in_list(max_tokens):
