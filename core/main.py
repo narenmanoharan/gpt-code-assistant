@@ -88,8 +88,8 @@ def opt_out_of_analytics():
     console.print("You have opted out of anonymous usage analytics and crash reports.")
 
 
-@app.callback()
-def callback():
+@app.callback(invoke_without_command=True)
+def callback(ctx: typer.Context):
     if not os.path.exists(CONFIG_FILE_PATH):
         logging.info("Creating default config file...")
         create_or_update_with_default_config()
@@ -101,6 +101,9 @@ def callback():
     )
     if not os.getenv("LOCAL_DEV"):
         configure_deps()
+
+    if ctx.invoked_subcommand is None:
+        typer.main.get_command(app).get_help(ctx)
 
 
 if __name__ == "__main__":

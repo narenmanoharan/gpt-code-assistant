@@ -16,6 +16,7 @@ discussions = "https://github.com/wolfia-app/gpt-code-search/discussions"
 wiki = "https://github.com/wolfia-app/gpt-code-search/wiki"
 
 [tool.poetry.scripts]
+gpt-code-search = "core.main:app"
 gcs = "core.main:app"
 
 [tool.poetry.dependencies]
