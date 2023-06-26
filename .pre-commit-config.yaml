@@ -27,6 +27,7 @@ repos:
     rev: 1.7.5
     hooks:
       - id: bandit
+        args: ['-c', '.bandit']
   - repo: https://github.com/pycqa/flake8
     rev: 6.0.0
     hooks:

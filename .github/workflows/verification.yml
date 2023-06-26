@@ -1,4 +1,4 @@
-name: Lint
+name: Verification
 
 on:
   push:
@@ -38,7 +38,8 @@ jobs:
           source .venv/bin/activate
           poetry install
 
-      - name: Run linter
+      - name: Run verification
         run: |
           source .venv/bin/activate
           poetry run pre-commit run --all-files
+          poetry run pytest

@@ -108,44 +108,33 @@ def get_contents_of_file(file_path: str) -> str:
         return ""
 
 
-def count_tokens(text: str) -> int:
+def count_tokens(text) -> int:
     encoding = tiktoken.get_encoding("cl100k_base")
-    return len(encoding.encode_ordinary(text))
+    return len(encoding.encode_ordinary(str(text)))
 
 
-def truncate_text_to_token_limit(data: Union[str, List[str], List[Tuple[str, int]]], max_tokens: int):
+def truncate_text_to_token_limit(data: Union[str, List[str], List[Tuple[str, float]]], max_tokens: int) -> str:
     """
     Truncate the text (or list of strings or list of tuples) to fit within the maximum token limit.
     :param data: The text or list of strings or list of tuples to truncate.
     :param max_tokens: The maximum number of tokens.
-    :return: The truncated text or list of strings or list of tuples.
+    :return: The truncated data.
     """
-    if not data:
-        return []
-
     if isinstance(data, str):
-        tokens = data.split(" ")
+        truncated_data = data
     elif isinstance(data, list):
-        if data and isinstance(data[0], tuple):
-            tokens = [item[0] for item in data]
+        if all(isinstance(i, tuple) and len(i) == 2 for i in data):
+            truncated_data = ", ".join(f"({text}, {value})" for text, value in data)
+        elif all(isinstance(i, str) for i in data):
+            truncated_data = " ".join(data)
         else:
-            tokens = data
+            raise ValueError("Invalid data type. Expected str, list of str, or list of tuples (str, float).")
     else:
-        raise ValueError("The input data should be a string or a list of strings or a list of tuples.")
+        raise ValueError("Invalid data type. Expected str, list of str, or list of tuples (str, float).")
 
-    total_tokens = len(tokens)
+    while count_tokens(truncated_data) > max_tokens:
+        truncated_data = truncated_data[:-1]
 
-    if total_tokens <= max_tokens:
-        return data
-
-    truncated_tokens = tokens[:max_tokens]
-    if isinstance(data, str):
-        truncated_data = " ".join(truncated_tokens)
-    elif data and isinstance(data[0], tuple):
-        ranks = [item[1] for item in data[:max_tokens]]
-        truncated_data = list(zip(truncated_tokens, ranks))
-    else:
-        truncated_data = truncated_tokens
     return truncated_data
 
 

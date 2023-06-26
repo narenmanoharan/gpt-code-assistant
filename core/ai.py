@@ -122,7 +122,7 @@ def get_next_completion(previous_response, messages, functions):
         {
             "role": "function",
             "name": function_name,
-            "content": str(truncated_response),
+            "content": truncated_response,
         }
     )
     next_response = chat_completion_request(
