@@ -30,15 +30,27 @@ pip install gpt-code-search
 
 #### Ask a question about your codebase
 
+To query about the purpose of your codebase, you can use the `query` command:
+
 ```bash
+gpt-code-search query "What does this codebase do?"
+# or use the shorthand alias
 gcs query "What does this codebase do?"
-
-gcs query "Can you generate a test for analytics.py?" # Note: Mentioning the file name is advised to improve accuracy
-
-gcs query "How do I use the analytics module?" # Note: Mentioning keywords to search across the codebase is advised to improve accuracy
 ```
 
-#### Select a model
+If you want to generate a test for a specific file, for example analytics.py, you can mention the file name to improve accuracy:
+```bash
+gcs query "Can you generate a test for analytics.py?"
+```
+
+For a general usage question about a certain module, like analytics, you can use keywords to search across the codebase:
+```bash
+gcs query "How do I use the analytics module?"
+```
+
+**Remember, mentioning the file name or specific keywords improves the accuracy of the search.**
+
+#### Select a model to use
 
 ```bash
 gcs select-model
