@@ -37,7 +37,8 @@ gpt-code-search query "What does this codebase do?"
 # or use the shorthand alias
 gcs query "What does this codebase do?"
 ```
-<img src="public/demo.gif" width="750" />
+
+<img src="public/demo.gif" width="750"  alt="gpt-code-search demo"/>
 
 If you want to generate a test for a specific file, for example analytics.py, you can mention the file name to improve accuracy:
 ```bash
@@ -81,7 +82,7 @@ Examples of the types of questions you might want to ask:
 
 This tool utilizes [OpenAI's function calling](https://platform.openai.com/docs/guides/gpt/function-calling) to allow GPT to call functions in your codebase. This enables us to automatically upload context directly from the file system on-demand, without having to manually copy and paste code snippets. This also means that no code is sent to any third-party service (other than OpenAI), only the question you ask and the code snippets that are requested by the LLM.
 
-<img src="https://github.com/wolfia-app/gpt-code-search/assets/9508432/01c9c2a7-7830-4926-992e-2eadd0dd6d36" width="750" />
+<img src="public/architecture.png" width="650" />
 
 The functions currently available for the LLM to call are:
 
