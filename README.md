@@ -48,6 +48,8 @@ For a general usage question about a certain module, like analytics, you can use
 gcs query "How do I use the analytics module?"
 ```
 
+https://github.com/wolfia-app/gpt-code-search/assets/9508432/725f1dc8-9379-4d0b-8993-9d64ad5a1af2
+
 **Remember, mentioning the file name or specific keywords improves the accuracy of the search.**
 
 #### Select a model to use
