@@ -82,6 +82,8 @@ Examples of the types of questions you might want to ask:
 
 This tool utilizes [OpenAI's function calling](https://platform.openai.com/docs/guides/gpt/function-calling) to allow GPT to call functions in your codebase. This enables us to automatically upload context directly from the file system on-demand, without having to manually copy and paste code snippets. This also means that no code is sent to any third-party service (other than OpenAI), only the question you ask and the code snippets that are requested by the LLM.
 
+<img src="https://github.com/wolfia-app/gpt-code-search/assets/9508432/01c9c2a7-7830-4926-992e-2eadd0dd6d36" width="750" />
+
 The functions currently available for the LLM to call are:
 
 - `search_codebase` - searches the codebase using a TF-IDF vectorizer
