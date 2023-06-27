@@ -7,7 +7,7 @@
     src="https://raw.githubusercontent.com/wolfia-app/gpt-code-search/main/public/logo.png"
   />
   <p>
-    <b>gpt-code-search</b> is an AI-powered tool enabling you to search your codebase with natural language. It utilizes GPT-4 to retrieve, search and answer queries about your code, boosting productivity and code understanding.
+    <b>gpt-code-search</b> is a tool enabling you to search your codebase with natural language. It utilizes OpenAI's function calling to retrieve, search and answer queries about your code, boosting productivity and code understanding.
   </p>
 </div>
 
@@ -15,7 +15,7 @@ Learn more about the motivation behind this project in our announcement [blog po
 
 ## Features
 
-- 🧠 **GPT-4**: Code search, retrieval, and answering all done with OpenAI and [function calling](https://openai.com/blog/function-calling-and-other-api-updates).
+- 🧠 **GPT-4**: Code search, retrieval, and answering all done with OpenAI's [function calling](https://openai.com/blog/function-calling-and-other-api-updates).
 - 🔐 **Privacy-first**: Code snippets only leave your machine when you ask a question and the LLM requests the relevant code.
 - 🔥 **Works instantly**: No pre-processing, chunking, or indexing, get started right away.
 - 📦 **File-system backed**: Works with any code on your machine.
