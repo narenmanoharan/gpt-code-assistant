@@ -11,6 +11,8 @@
   </p>
 </div>
 
+Learn more about the motivation behind this project in our announcement [blog post](https://wolfia.com/blog/announcing-gpt-code-search).
+
 ## Features
 
 - 🧠 **GPT-4**: Code search, retrieval, and answering all done with OpenAI and [function calling](https://openai.com/blog/function-calling-and-other-api-updates).
