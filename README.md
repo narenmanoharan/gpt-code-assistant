@@ -37,6 +37,7 @@ gpt-code-search query "What does this codebase do?"
 # or use the shorthand alias
 gcs query "What does this codebase do?"
 ```
+<img src="public/demo.gif" width="750" />
 
 If you want to generate a test for a specific file, for example analytics.py, you can mention the file name to improve accuracy:
 ```bash
@@ -47,8 +48,6 @@ For a general usage question about a certain module, like analytics, you can use
 ```bash
 gcs query "How do I use the analytics module?"
 ```
-
-https://github.com/wolfia-app/gpt-code-search/assets/9508432/725f1dc8-9379-4d0b-8993-9d64ad5a1af2
 
 **Remember, mentioning the file name or specific keywords improves the accuracy of the search.**
 
