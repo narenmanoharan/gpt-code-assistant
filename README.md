@@ -96,9 +96,7 @@ Combining these three functions, we can ask the LLM to search the codebase for a
 
 ### Privacy
 
-Outside of the LLM, no data is sent or stored.
-
-The only data sent to LLM is the question you ask and the code snippets that it requests related to your question. All code snippets are retrieved from your local machine.
+This tool prioritizes privacy. Outside of the LLM, no code is sent to us and is only used as context for the LLM. We do collect anonymous usage data to improve the tool, but you can opt out of this.
 
 ## Limitations
 
