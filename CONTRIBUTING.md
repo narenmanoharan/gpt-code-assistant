@@ -57,7 +57,7 @@ export LOCAL_DEV=true
 1. Run the project:
 
 ```bash
-poetry run python core/main.py
+poetry run gpt-code-search
 ```
 
 Now you can modify the codebase and see your changes!

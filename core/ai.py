@@ -107,7 +107,13 @@ def get_next_completion(previous_response, messages, functions):
         function_response = function_call(file_path)
     elif function_name == "search_codebase":
         function_call = search_codebase
-        keywords = function_args.get("keywords")
+        function_args = json.loads(assistant_message["function_call"]["arguments"])
+        if isinstance(function_args, list):
+            keywords = function_args
+        elif isinstance(function_args, dict):
+            keywords = function_args.get("keywords")
+        else:
+            raise ValueError(f"Invalid function arguments: {function_args}")
         function_response = function_call(keywords)
     elif function_name == "get_file_tree":
         function_call = get_file_tree
