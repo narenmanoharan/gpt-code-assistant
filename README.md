@@ -69,9 +69,9 @@ The tool will prompt you to configure the `OPENAI_API_KEY`, if you haven't alrea
 
 ## Problem
 
-You want to leverage the power of GPT-4 to search your codebase, but you don't want to manually copy and paste code snippets into a prompt nor send your code to another third-party service.
+You want to leverage the power of GPT-4 to search your codebase, but you don't want to manually copy and paste code snippets into a prompt nor send your code to another third-party service (other than OpenAI).
 
-This tool solves these problems by letting GPT-4 determine the most relevant code snippets within your codebase. This removes the need to copy and paste or send your code to another third-party. Also, it meets you where you already live, in your terminal, not a new UI or window.
+This tool solves these problems by letting GPT-4 determine the most relevant code snippets within your codebase. Also, it meets you where you already live, in your terminal, not a new UI or window.
 
 Examples of the types of questions you might want to ask:
 
@@ -82,7 +82,7 @@ Examples of the types of questions you might want to ask:
 
 ## How it works
 
-This tool utilizes [OpenAI's function calling](https://platform.openai.com/docs/guides/gpt/function-calling) to allow GPT to call functions in your codebase. This enables us to automatically upload context directly from the file system on-demand, without having to manually copy and paste code snippets. This also means that no code is sent to any third-party service (other than OpenAI), only the question you ask and the code snippets that are requested by the LLM.
+We utilize OpenAI's function calling to let GPT-4 call certain predefined functions in our library. You do not need to implement any of these functions yourself. These functions are designed to interact with your codebase and return enough context for the LLM to perform code searches without pre-indexing it or uploading your repo to a third party other than OpenAI. So, you only need to run the tool from the directory you want to search.
 
 <img src="public/architecture.png" width="650" />
 
@@ -92,7 +92,7 @@ The functions currently available for the LLM to call are:
 - `get_file_tree` - provides the file tree of the codebase
 - `get_file_contents` - provides the contents of a file
 
-Combining these three functions, we can ask the LLM to search the codebase for a keyword, and then retrieve the contents of the file that contains the keyword. And it's as simple as that!
+These functions are implemented in `gpt-code-search` and are triggered by chat completions. The LLM is prompted to utilize the search_codebase and get_file_tree function as needed to find the necessary context to answer your query and then loops as needed to collect more context with the get_file_contents until the LLM responds.
 
 ### Privacy
 
