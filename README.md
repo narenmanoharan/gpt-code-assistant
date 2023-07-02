@@ -60,7 +60,7 @@ gcs query "How do I use the analytics module?"
 gcs select-model
 ```
 
-Defaults to `gpt-3.5-turbo-16k`. The selected model is stored in `~/$HOME/.gpt-code-search/config.toml`.
+Defaults to `gpt-3.5-turbo-16k`. The selected model is stored in `$HOME/.gpt-code-search/config.toml`.
 
 
 ### Configuration
