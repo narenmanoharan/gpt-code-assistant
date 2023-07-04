@@ -1,5 +1,6 @@
 import logging
 import os
+import fnmatch
 from typing import List, Union, Tuple
 
 import tiktoken
@@ -48,7 +49,7 @@ def get_file_tree(start_path: str = ".", max_depth: int = MAX_DEPTH, depth: int 
         return []
     tree = []
     for item in os.listdir(start_path):
-        if item in IGNORED_FOLDERS or item in IGNORED_FILES:
+        if item in IGNORED_FOLDERS or any(fnmatch.fnmatch(item, pattern) for pattern in IGNORED_FILES):
             continue
         item_path = os.path.join(start_path, item)
         if os.path.isfile(item_path):
