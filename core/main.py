@@ -6,7 +6,7 @@ import typer
 from rich.console import Console
 from rich.logging import RichHandler
 
-from core.ai import chat_completions
+from core.ai import chat_completions, get_available_models
 from core.config import (
     save_selected_model,
     log_usage_info,
@@ -15,6 +15,7 @@ from core.config import (
     save_opt_out_of_analytics,
     configure_deps,
 )
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -48,16 +49,19 @@ def select_model():
     """
     Select the GPT model to use.
     """
-    models = ["gpt-4-0613", "gpt-3.5-turbo-0613", "gpt-3.5-turbo-16k"]
+    model_name = [model["name"] for model in get_available_models()]
+    model_max_tokens = [model["max_tokens"] for model in get_available_models()]
     console.print("Available Models:")
-    for index, model in enumerate(models, start=1):
+    for index, model in enumerate(model_name, start=1):
         console.print(f"{index}. {model}")
+    console.print("")
 
-    selected_model = typer.prompt("Select a model (enter the number)")
-    if selected_model.isdigit() and int(selected_model) in range(1, len(models) + 1):
-        selected_model_name = models[int(selected_model) - 1]
+    model_index = typer.prompt("Select a model (enter the number)")
+    if model_index.isdigit() and int(model_index) in range(1, len(model_name) + 1):
+        selected_model_name = model_name[int(model_index) - 1]
+        selected_max_tokens = model_max_tokens[int(model_index) - 1]
         console.print(f"Selected model: {selected_model_name}")
-        save_selected_model(selected_model_name)
+        save_selected_model(selected_model_name, selected_max_tokens)
     else:
         console.print("Invalid selection. Please enter a valid number.")
         typer.Exit()

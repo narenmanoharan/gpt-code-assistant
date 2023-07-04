@@ -1,11 +1,12 @@
 import json
 import logging
+from typing import List
 
 import openai
 import requests
 from rich.markdown import Markdown
 
-from core.config import load_selected_model
+from core.config import load_selected_model, load_max_tokens
 from core.functions import (
     enabled_functions,
     get_contents_of_file,
@@ -14,8 +15,6 @@ from core.functions import (
     get_file_tree,
 )
 
-# Reduced from 16k to 14k to allow for prompt context
-MAX_TOKENS = 14_000
 
 PROMPT = """\
 You're a superpowered coding assistant. Your role is to help users understand and navigate their codebases,
@@ -56,6 +55,18 @@ contents of the file and review the contents of at least three files before answ
 Compose responses in markdown with code when necessary. Your objective is to provide the most accurate and detailed
 answer possible, even if it results in a longer response. Let's start assisting with your coding tasks!
 """
+
+
+def get_available_models() -> List:
+    token_mapping = {"16k": 14000, "32k": 30000}
+    return [
+        {
+            "name": model["id"],
+            "max_tokens": next((token_mapping[part] for part in model["id"].split("-") if part in token_mapping), 6000),
+        }
+        for model in openai.Model.list().data
+        if model["id"].startswith("gpt")
+    ]
 
 
 def chat_completion_request(messages, functions=None):
@@ -122,7 +133,7 @@ def get_next_completion(previous_response, messages, functions):
     else:
         raise ValueError(f"Function {function_name} not found.")
 
-    truncated_response = truncate_text_to_token_limit(function_response, MAX_TOKENS)
+    truncated_response = truncate_text_to_token_limit(function_response, load_max_tokens())
 
     messages.append(
         {

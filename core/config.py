@@ -5,17 +5,18 @@ from pathlib import Path
 
 import toml
 
+from core import ai
 from core.analytics import send_event, configure_sentry, configure_posthog
 
-CONFIG_FILE_PATH = os.path.join(Path.home(), ".gpt-code-search/config.toml")
 
-models = ["gpt-4-0613", "gpt-3.5-turbo-0613", "gpt-3.5-turbo-16k"]
+CONFIG_FILE_PATH = os.path.join(Path.home(), ".gpt-code-search/config.toml")
 
 
 def create_or_update_with_default_config():
     default_config = {
         "id": str(uuid.uuid4()),
         "model": "gpt-3.5-turbo-16k",
+        "max_tokens": 14_000,
         "usage": {"query_count": 0, "query_at": "", "query_execution_time": ""},
         "analytics": "enabled",
     }
@@ -38,13 +39,19 @@ def create_or_update_with_default_config():
 
 def load_selected_model():
     config = load_config()
-    model = config.get("model")
-    if model not in models:
+    selected_model = config.get("model")
+    models = [model["name"] for model in ai.get_available_models()]
+    if selected_model not in models:
         raise ValueError(
-            f"Invalid model {model}. Valid models are {models}. "
+            f"Invalid model {selected_model}. Valid models are {models}. "
             f"Please run `gpt-code-search select-model` to select a valid model."
         )
-    return model
+    return selected_model
+
+
+def load_max_tokens():
+    config = load_config()
+    return config.get("max_tokens")
 
 
 def log_usage_info(start_time, end_time):
@@ -75,8 +82,8 @@ def unique_id():
     return config["id"]
 
 
-def save_selected_model(selected_model):
-    config = {"model": selected_model}
+def save_selected_model(selected_model, selected_model_max_tokens):
+    config = {"model": selected_model, "max_tokens": selected_model_max_tokens}
     with open(CONFIG_FILE_PATH, "w") as config_file:
         toml.dump(config, config_file)
 
