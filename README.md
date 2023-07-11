@@ -11,8 +11,6 @@
   </p>
 </div>
 
-Learn more about the motivation behind this project in our announcement [blog post](https://wolfia.com/blog/announcing-gpt-code-search).
-
 ## Features
 
 - 🧠 **GPT-4**: Code search, retrieval, and answering all done with OpenAI's [function calling](https://openai.com/blog/function-calling-and-other-api-updates).
@@ -117,12 +115,6 @@ These limitations lead to suboptimal results in a few cases, but we're working o
 - [ ] Use [guidance](https://github.com/microsoft/guidance) to improve prompts
 - [ ] Add support for additional models (Claude, Bedrock, etc)
 
-## Wolfia Codex
-
-`gpt-code-search` is a simplified version of [Wolfia Codex](https://wolfia.com), a cloud tool that enables you to ask any question about open source and private code bases like [`Langchain`](https://wolfia.com/?projectId=2b964031-0ce8-472a-abb7-27079a7b84f3), [`Vercel ai`](https://wolfia.com/?projectId=4710df1f-43f8-4d30-863b-d67876ae0f06), or [`gpt-engineer`](https://wolfia.com/?projectId=8d9dd449-da2d-410e-a4fc-f2ff75a30f73).
-
-If you're looking for a more powerful tool which solves the above limitations by using vector embeddings and a more powerful search and retrieval system, or avoiding the setup, check out [Wolfia Codex](https://wolfia.com), search codebases, share your questions and answers, and more!
-
 ## Analytics
 
 We collect anonymous crash and usage data to help us improve the tool. This data aids in understanding usage patterns and improving the tool. You can opt out of analytics by running:
@@ -156,12 +148,12 @@ We are committed to fostering a welcoming community. To ensure that everyone fee
 
 ## Support
 
-If you're having trouble using `gpt-code-search`, feel free to [open an issue](https://github.com/wolfia-app/gpt-code-search/issues) on our GitHub. You can also reach out to us directly at [support@wolfia.com](mailto:support@wolfia.com). We're always happy to help!
+If you're having trouble using `gpt-code-search`, feel free to [open an issue](https://github.com/wolfia-app/gpt-code-search/issues) on our GitHub. You can also reach out to us directly at [narenkmanoharan@gmail.com](mailto:narenkmanoharan@gmail.com). We're always happy to help!
 
 ## Feedback
 
-Your feedback is very important to us! If you have ideas for how we can improve `gpt-code-search`, we'd love to hear from you. Please [open an issue](https://github.com/wolfia-app/gpt-code-search/issues) with your suggestions, or you can email [support@wolfia.com](mailto:support@wolfia.com).
+Your feedback is very important to us! If you have ideas for how we can improve `gpt-code-search`, we'd love to hear from you. Please [open an issue](https://github.com/wolfia-app/gpt-code-search/issues) or reach out to us directly at [narenkmanoharan@gmail](mailto:narenkmanoharan@gmail) with your feedback or thoughts.
 
 ## License
 
-Apache 2.0 © [Wolfia](https://wolfia.com)
+This project is licensed under the terms of the [Apache 2.0](LICENSE).
