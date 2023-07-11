@@ -4,7 +4,7 @@
     height="240"
     width="240"
     alt="logo"
-    src="https://raw.githubusercontent.com/wolfia-app/gpt-code-search/main/public/logo.png"
+    src="https://raw.githubusercontent.com/narenmanoharan/gpt-code-search/main/public/logo.png"
   />
   <p>
     <b>gpt-code-search</b> is a tool enabling you to search your codebase with natural language. It utilizes OpenAI's function calling to retrieve, search and answer queries about your code, boosting productivity and code understanding.
@@ -148,11 +148,11 @@ We are committed to fostering a welcoming community. To ensure that everyone fee
 
 ## Support
 
-If you're having trouble using `gpt-code-search`, feel free to [open an issue](https://github.com/wolfia-app/gpt-code-search/issues) on our GitHub. You can also reach out to us directly at [narenkmanoharan@gmail.com](mailto:narenkmanoharan@gmail.com). We're always happy to help!
+If you're having trouble using `gpt-code-search`, feel free to [open an issue](https://github.com/narenmanoharan/gpt-code-search/issues) on our GitHub. You can also reach out to us directly at [narenkmanoharan@gmail.com](mailto:narenkmanoharan@gmail.com). We're always happy to help!
 
 ## Feedback
 
-Your feedback is very important to us! If you have ideas for how we can improve `gpt-code-search`, we'd love to hear from you. Please [open an issue](https://github.com/wolfia-app/gpt-code-search/issues) or reach out to us directly at [narenkmanoharan@gmail](mailto:narenkmanoharan@gmail) with your feedback or thoughts.
+Your feedback is very important to us! If you have ideas for how we can improve `gpt-code-search`, we'd love to hear from you. Please [open an issue](https://github.com/narenmanoharan/gpt-code-search/issues) or reach out to us directly at [narenkmanoharan@gmail](mailto:narenkmanoharan@gmail) with your feedback or thoughts.
 
 ## License
 

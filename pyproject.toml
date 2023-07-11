@@ -6,13 +6,13 @@ authors = ["narenmanoharan <narenkmanoharan@gmail.com>", "skovy <smiskoviak@gmai
 license = "Apache-2.0"
 readme = "README.md"
 packages = [{include = "core"}]
-repository = "https://github.com/wolfia-app/gpt-code-search"
+repository = "https://github.com/narenmanoharan/gpt-code-search"
 keywords = ["gpt", "code", "search", "gpt4", "llm"]
 
 [tool.poetry.urls]
-issues = "https://github.com/wolfia-app/gpt-code-search/issues"
-discussions = "https://github.com/wolfia-app/gpt-code-search/discussions"
-wiki = "https://github.com/wolfia-app/gpt-code-search/wiki"
+issues = "https://github.com/narenmanoharan/gpt-code-search/issues"
+discussions = "https://github.com/narenmanoharan/gpt-code-search/discussions"
+wiki = "https://github.com/narenmanoharan/gpt-code-search/wiki"
 
 [tool.poetry.scripts]
 gpt-code-search = "core.main:app"

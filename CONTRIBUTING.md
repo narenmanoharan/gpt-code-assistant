@@ -6,7 +6,7 @@ First off, thank you for considering contributing to gpt-code-search! 🚀
 
 If you've noticed a bug or have a feature request, make one here! It's generally best if you get confirmation of your bug or approval for your feature request this way before starting to code.
 
-Issue Tracker: https://github.com/wolfia-app/gpt-code-search/issues
+Issue Tracker: https://github.com/narenmanoharan/gpt-code-search/issues
 
 ## Fork & Create a Branch
 
