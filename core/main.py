@@ -1,6 +1,5 @@
 import logging
 import os
-from datetime import datetime
 
 import typer
 from rich.console import Console
@@ -9,11 +8,8 @@ from rich.logging import RichHandler
 from core.ai import chat_completions, get_available_models
 from core.config import (
     save_selected_model,
-    log_usage_info,
     CONFIG_FILE_PATH,
     create_or_update_with_default_config,
-    save_opt_out_of_analytics,
-    configure_deps,
 )
 
 
@@ -75,21 +71,9 @@ def query(message: str):
     if not check_openai_key():
         return
 
-    start_time = datetime.utcnow()
     response = chat_completions(message)
-    end_time = datetime.utcnow()
-    log_usage_info(start_time, end_time)
     console.print(response)
     typer.Exit()
-
-
-@app.command()
-def opt_out_of_analytics():
-    """
-    Opt out of anonymous usage analytics and crash reports.
-    """
-    save_opt_out_of_analytics()
-    console.print("You have opted out of anonymous usage analytics and crash reports.")
 
 
 @app.callback(invoke_without_command=True)
@@ -103,8 +87,6 @@ def callback(ctx: typer.Context):
         "Run this CLI closer to the directory or file for more accurate answers. The max depth is 5 levels.\n",
         style="bold yellow",
     )
-    if not os.getenv("LOCAL_DEV"):
-        configure_deps()
 
     if ctx.invoked_subcommand is None:
         typer.main.get_command(app).get_help(ctx)

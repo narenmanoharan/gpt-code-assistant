@@ -1,10 +1,11 @@
+import fnmatch
 import logging
 import os
-import fnmatch
 from typing import List, Union, Tuple
 
 import tiktoken
 from sklearn.feature_extraction.text import TfidfVectorizer
+
 
 IGNORED_FOLDERS = [
     "__pycache__",

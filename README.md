@@ -115,27 +115,6 @@ These limitations lead to suboptimal results in a few cases, but we're working o
 - [ ] Use [guidance](https://github.com/microsoft/guidance) to improve prompts
 - [ ] Add support for additional models (Claude, Bedrock, etc)
 
-## Analytics
-
-We collect anonymous crash and usage data to help us improve the tool. This data aids in understanding usage patterns and improving the tool. You can opt out of analytics by running:
-
-```bash
-gcs opt-out-of-analytics
-```
-
-You can check the data that by looking at the [analytics](core/analytics.py) and [config](core/config.py) files.
-
-Here's an exhaustive list of the data we collect:
-
-```
-- exception - stacktraces of crashes
-- uuid - a unique identifier for the user
-- model - the model used for the query
-- usage - the type of usage (query_count, query_at, query_execution_time)
-```
-
-**Note: We do not collect any PII (ip-address), queries or code snippets.**
-
 ## Contributing
 
 We love contributions from the community! ❤️ If you'd like to contribute, feel free to fork the repository and submit a pull request.
