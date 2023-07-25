@@ -4,10 +4,11 @@ from pathlib import Path
 
 import toml
 
-from core import ai
+from ai import open_ai
 
+BASE_DIR = os.path.join(Path.home(), ".gpt-code-search")
 
-CONFIG_FILE_PATH = os.path.join(Path.home(), ".gpt-code-search/config.toml")
+CONFIG_FILE_PATH = os.path.join(BASE_DIR, ".gpt-code-search/config.toml")
 
 
 def create_or_update_with_default_config():
@@ -36,7 +37,7 @@ def create_or_update_with_default_config():
 def load_selected_model():
     config = load_config()
     selected_model = config.get("model")
-    models = [model["name"] for model in ai.get_available_models()]
+    models = [model["name"] for model in open_ai.get_available_models()]
     if selected_model not in models:
         raise ValueError(
             f"Invalid model {selected_model}. Valid models are {models}. "

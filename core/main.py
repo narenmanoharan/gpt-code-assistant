@@ -5,13 +5,12 @@ import typer
 from rich.console import Console
 from rich.logging import RichHandler
 
-from core.ai import chat_completions, get_available_models
-from core.config import (
-    save_selected_model,
-    CONFIG_FILE_PATH,
-    create_or_update_with_default_config,
-)
-
+from ai.open_ai import get_available_models, query_llm
+from core.config import (CONFIG_FILE_PATH,
+                         create_or_update_with_default_config,
+                         save_selected_model)
+from data.database import create_tables_if_not_exists
+from repository.projects import create_or_update_project, list_all_projects
 
 logging.basicConfig(
     level=logging.INFO,
@@ -64,29 +63,43 @@ def select_model():
 
 
 @app.command()
-def query(message: str):
+def query(project_name: str, query: str):
     """
-    Query the current directory with any questions.
+    Query your codebase. Provide the project name (you can list all projects with `gcs list-projects`)
     """
     if not check_openai_key():
         return
 
-    response = chat_completions(message)
-    console.print(response)
+    query_llm(project_name, query)
     typer.Exit()
 
+
+@app.command()
+def create_project(name: str, path: str):
+    """
+    Create a new project for path or update the existing project and start indexing it.
+    """
+    absolute_path = os.path.abspath(path)
+    if not os.path.exists(absolute_path):
+        raise typer.BadParameter(f"Path {absolute_path} does not exist. Please enter a valid path.")
+    create_or_update_project(name, absolute_path)
+    typer.Exit()
+
+@app.command()
+def list_projects():
+    """
+    List all projects.
+    """
+    list_all_projects()
+    typer.Exit()
 
 @app.callback(invoke_without_command=True)
 def callback(ctx: typer.Context):
     if not os.path.exists(CONFIG_FILE_PATH):
-        logging.info("Creating default config file...")
+        console.print("Creating default config file...")
         create_or_update_with_default_config()
 
-    console.print(
-        "\nTip: Mention specific file names in your query for the best results. "
-        "Run this CLI closer to the directory or file for more accurate answers. The max depth is 5 levels.\n",
-        style="bold yellow",
-    )
+    create_tables_if_not_exists()
 
     if ctx.invoked_subcommand is None:
         typer.main.get_command(app).get_help(ctx)

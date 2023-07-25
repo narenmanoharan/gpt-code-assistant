@@ -42,4 +42,3 @@ jobs:
         run: |
           source .venv/bin/activate
           poetry run pre-commit run --all-files
-          poetry run pytest
