@@ -7,16 +7,27 @@
     src="https://raw.githubusercontent.com/narenmanoharan/gpt-code-search/main/public/logo.png"
   />
   <p>
-    <b>gpt-code-search</b> is a tool enabling you to search your codebase with natural language. It utilizes OpenAI's function calling to retrieve, search and answer queries about your code, boosting productivity and code understanding.
+    <b>gpt-code-search</b> is an AI-based tool enabling you to search your codebase using natural language. It employs Language Models (LLMs) and vector embeddings—a technique to convert objects, like text, into vectors—to retrieve, search, and answer queries about your code, boosting productivity and code understanding.
   </p>
 </div>
 
+## Table of Contents
+
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Usage](#usage)
+- [Configuration](#configuration)
+- [Problem](#problem)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+
 ## Features
 
-- 🧠 **GPT-4**: Code search, retrieval, and answering all done with OpenAI's [function calling](https://openai.com/blog/function-calling-and-other-api-updates).
-- 🔐 **Privacy-first**: Code snippets only leave your machine when you ask a question and the LLM requests the relevant code.
-- 🔥 **Works instantly**: No pre-processing, chunking, or indexing, get started right away.
-- 📦 **File-system backed**: Works with any code on your machine.
+- **LLM-based Search & Retrieval**: Uses Language Models for efficient code search, retrieval, and comprehension.
+- **File-system Integration**: Designed to work with any codebase and operates directly with any local code on your machine, allowing seamless integration with your existing workflow.
+- **Language Agnostic**: Supports multiple programming languages.
+- **Privacy-centric Design**: Code snippets are only transmitted when a question is asked and the Language Model requests the relevant code, ensuring privacy. **(Note: Code snippets are shared with OpenAI)**
 
 ## Getting Started
 
@@ -28,38 +39,73 @@ pip install gpt-code-search
 
 ### Usage
 
+#### Create a project
+
+First, create a project to index all the files. This step involves creating embeddings for each file and storing them in a local database.
+
+```bash
+gpt-code-search create-project <project-name> <path-to-codebase>
+
+gpt-code-search create-project gpt-code-search .
+```
+
 #### Ask a question about your codebase
 
 To query about the purpose of your codebase, you can use the `query` command:
 
 ```bash
-gpt-code-search query "What does this codebase do?"
-# or use the shorthand alias
-gcs query "What does this codebase do?"
+gpt-code-search query <project-name> "What does this codebase do?"
 ```
 
 <img src="public/demo.gif" width="750"  alt="gpt-code-search demo"/>
 
 If you want to generate a test for a specific file, for example analytics.py, you can mention the file name to improve accuracy:
+
 ```bash
-gcs query "Can you generate a test for analytics.py?"
+gpt-code-search query gpt-code-search "Can you generate a test for analytics.py?"
 ```
 
 For a general usage question about a certain module, like analytics, you can use keywords to search across the codebase:
+
 ```bash
-gcs query "How do I use the analytics module?"
+gpt-code-search query gpt-code-search "How do I use the analytics module?"
 ```
 
 **Remember, mentioning the file name or specific keywords improves the accuracy of the search.**
 
-#### Select a model to use
+#### List all projects
+
+To get a list of all the projects:
 
 ```bash
-gcs select-model
+gpt-code-search list-projects
+```
+
+#### Refresh a project
+
+If you want to reindex a project and update the embeddings to the latest content:
+
+```bash
+gpt-code-search refresh-project <project-name>
+```
+
+#### Delete a project
+
+If you wish to delete a project and all its data (including embeddings):
+
+```bash
+gpt-code-search delete-project <project-name>
+```
+
+#### Select a model to use
+
+You can select which model to use for your queries:
+
+```bash
+gpt-code-search select-model
 ```
 
 Defaults to `gpt-3.5-turbo-16k`. The selected model is stored in `$HOME/.gpt-code-search/config.toml`.
-
 
 ### Configuration
 
@@ -67,9 +113,7 @@ The tool will prompt you to configure the `OPENAI_API_KEY`, if you haven't alrea
 
 ## Problem
 
-You want to leverage the power of GPT-4 to search your codebase, but you don't want to manually copy and paste code snippets into a prompt nor send your code to another third-party service (other than OpenAI).
-
-This tool solves these problems by letting GPT-4 determine the most relevant code snippets within your codebase. Also, it meets you where you already live, in your terminal, not a new UI or window.
+You want to leverage the power of GPT-4 to search your codebase, but you don't want to manually copy and paste code snippets into a prompt nor send your code to another third-party service (other than OpenAI). This tool solves these problems by letting GPT-4 determine the most relevant code snippets within your codebase. It also allows you to perform your queries in your terminal, removing the need for a separate UI.
 
 Examples of the types of questions you might want to ask:
 
@@ -78,37 +122,9 @@ Examples of the types of questions you might want to ask:
 - 🛠️ Generate new code based on existing files and conventions
 - 📨 Ask general questions about any part of the codebase
 
-## How it works
-
-We utilize OpenAI's function calling to let GPT-4 call certain predefined functions in our library. You do not need to implement any of these functions yourself. These functions are designed to interact with your codebase and return enough context for the LLM to perform code searches without pre-indexing it or uploading your repo to a third party other than OpenAI. So, you only need to run the tool from the directory you want to search.
-
-<img src="public/architecture.png" width="650" />
-
-The functions currently available for the LLM to call are:
-
-- `search_codebase` - searches the codebase using a TF-IDF vectorizer
-- `get_file_tree` - provides the file tree of the codebase
-- `get_file_contents` - provides the contents of a file
-
-These functions are implemented in `gpt-code-search` and are triggered by chat completions. The LLM is prompted to utilize the search_codebase and get_file_tree function as needed to find the necessary context to answer your query and then loops as needed to collect more context with the get_file_contents until the LLM responds.
-
-### Privacy
-
-This tool prioritizes privacy. Outside of the LLM, no code is sent to us and is only used as context for the LLM. We do collect anonymous usage data to improve the tool, but you can opt out of this.
-
-## Limitations
-
-This does have some limitations, namely:
-
-- The LLM is unable to load context across multiple files at once. This means that if you ask a question that requires context from multiple files, you will need to ask multiple questions.
-- Specify the file name and keywords in your question to improve accuracy. For example, if you want to ask a question about `analytics.py`, mention the file name in your question.
-- The level of search and retrieval is limited by the context window, which refers to the scope of the search conducted by the tool, meaning that we can only search 5 levels deep in the file system. So you need to run the tool from the folder/package closest to the code you want to search.
-
-These limitations lead to suboptimal results in a few cases, but we're working on improving this. **We wanted to get this tool out there as soon as possible to get feedback and iterate on it!**
-
 ## Roadmap
 
-- [ ] Use vector embeddings to improve search and retrieval
+- [x] Use vector embeddings to improve search and retrieval
 - [ ] Add support for generating code and saving it to a file
 - [ ] Support for searching across multiple codebases
 - [ ] Allow the model to create new functions that it can then execute
