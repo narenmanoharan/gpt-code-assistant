@@ -4,6 +4,7 @@ from typing import Optional
 
 from rich.console import Console
 from rich.table import Table
+from data.chroma import delete_collection
 
 from data.database import read_only_session, read_write_session
 from data.projects import Project
@@ -81,6 +82,25 @@ def create_or_update_project(name: str, path: str):
         session.refresh(project)
         if project:
             index_project(project)
+
+
+def _delete_project(name: str):
+    """ Delete a project and all its data.
+
+    Args:
+        name (str): Project name
+    """
+    with read_write_session() as session:
+        project = session.query(Project).filter_by(name=name).first()
+        if project:
+            console.print(f"Deleting embeddings for project - {project.name}")
+            delete_collection(project.id)
+            console.print(f"Deleting project - {project.name} at {project.path}")
+            session.delete(project)
+            console.print(f"Project - {project.name} deleted.")
+            session.commit()
+        else:
+            console.print(f"Project with name - {name} does not exist.")
 
 def index_project(project: Project):
     """ Start indexing the project.

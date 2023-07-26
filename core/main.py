@@ -10,7 +10,7 @@ from core.config import (CONFIG_FILE_PATH,
                          create_or_update_with_default_config,
                          save_selected_model)
 from data.database import create_tables_if_not_exists
-from repository.projects import create_or_update_project, list_all_projects
+from repository.projects import _delete_project, create_or_update_project, list_all_projects
 
 logging.basicConfig(
     level=logging.INFO,
@@ -83,6 +83,23 @@ def create_project(name: str, path: str):
     if not os.path.exists(absolute_path):
         raise typer.BadParameter(f"Path {absolute_path} does not exist. Please enter a valid path.")
     create_or_update_project(name, absolute_path)
+    typer.Exit()
+
+@app.command()
+def remove_project(name: str):
+    """
+    Remove a project and delete all its data (embeddings included)
+    """
+    _delete_project(name)
+    typer.Exit()
+
+
+@app.command()
+def reindex_project(name: str):
+    """
+    Trigger a reindex of a project and update the embeddings to the latest content.
+    """
+    console.print("Not implemented yet.")
     typer.Exit()
 
 @app.command()
