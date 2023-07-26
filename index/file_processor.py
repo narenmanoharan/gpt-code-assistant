@@ -2,6 +2,7 @@ import fnmatch
 import logging
 import os
 from hashlib import sha256
+from tqdm import tqdm
 from typing import List
 
 from pydantic import BaseModel
@@ -42,7 +43,7 @@ def source_files(project: Project) -> List[str]:
         "node_modules",
     ]
     file_paths = []
-    for dirpath, dirnames, filenames in os.walk(project.path):
+    for dirpath, dirnames, filenames in tqdm(os.walk(project.path), desc="Walking through project directories"):
         # Exclude directories and files matched by ignore_patterns
         dirnames[:] = [d for d in dirnames if not any(fnmatch.fnmatch(d, pattern) for pattern in ignore_patterns)]
         filenames[:] = [f for f in filenames if not any(fnmatch.fnmatch(f, pattern) for pattern in ignore_patterns)]
@@ -55,7 +56,7 @@ def source_files(project: Project) -> List[str]:
 def chunk_source_files(src_files: List[str]) -> ChunkResult:
     chunks = []
     skipped = 0
-    for file_path in src_files:
+    for file_path in tqdm(src_files, desc="Processing source files"):
         _, file_extension = os.path.splitext(file_path)
         if not file_extension:
             logging.debug(f"File {file_path} has no extension, skipping...")

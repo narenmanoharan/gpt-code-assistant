@@ -19,7 +19,7 @@ def get_file_section_collection(project_id: UUID):
         embedding_function=openai_embedding_function
     )
 
-def create_file_section_emebeddings(project_id: UUID, file_section_id: UUID, file_section: str):
+def create_file_section_embeddings(project_id: UUID, file_section_id: UUID, file_section: str):
     get_file_section_collection(project_id).upsert(ids=[str(file_section_id)], documents=[file_section])
 
 def delete_file_section_embeddings(project_id: UUID, file_section_id: UUID):
