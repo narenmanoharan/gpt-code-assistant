@@ -4,7 +4,7 @@ from typing import Optional
 
 from rich.console import Console
 from rich.table import Table
-from data.chroma import delete_collection
+from data.chroma import delete_all_file_section_embeddings
 
 from data.database import read_only_session, read_write_session
 from data.projects import Project
@@ -37,23 +37,22 @@ def list_all_projects():
     """List all projects created."""
     with read_only_session() as session:
         projects = session.query(Project).all()
-        table = Table(title="Projects")
-        table.add_column("Name", style="cyan", no_wrap=True)
-        table.add_column("Path", style="green", no_wrap=True)
-        table.add_column("Created at", style="red", no_wrap=True)
+        if not projects:
+            console.print("No projects found. Please create a project with `gcs create-project`.")
+        else:
+            table = Table(title="Projects")
+            table.add_column("Name", style="cyan", no_wrap=True)
+            table.add_column("Path", style="green", no_wrap=True)
+            table.add_column("Created at", style="red", no_wrap=True)
+            for project in projects:
+                table.add_row(
+                    project.name,
+                    project.path,
+                    project.created_at.strftime("%B %d, %Y, %I:%M %p"),
+                )
+            console.print(table)
 
-        datetime_format = "%B %d, %Y, %I:%M %p"
-
-        for project in projects:
-            table.add_row(
-                project.name,
-                project.path,
-                project.created_at.strftime(datetime_format),
-            )
-
-        console.print(table)
-
-def create_or_update_project(name: str, path: str):
+def create_project(name: str, path: str):
     """ Check if project already exists with this path.
 
     - If it does, start indexing it.
@@ -84,7 +83,7 @@ def create_or_update_project(name: str, path: str):
             index_project(project)
 
 
-def _delete_project(name: str):
+def delete_project(name: str):
     """ Delete a project and all its data.
 
     Args:
@@ -94,11 +93,26 @@ def _delete_project(name: str):
         project = session.query(Project).filter_by(name=name).first()
         if project:
             console.print(f"Deleting embeddings for project - {project.name}")
-            delete_collection(project.id)
+            delete_all_file_section_embeddings(project.id)
             console.print(f"Deleting project - {project.name} at {project.path}")
             session.delete(project)
             console.print(f"Project - {project.name} deleted.")
             session.commit()
+        else:
+            console.print(f"Project with name - {name} does not exist.")
+
+def reindex_project(name: str):
+    """ Trigger a reindex of a project and update the embeddings to the latest content.
+
+    Args:
+        name (str): Project name
+    """
+    with read_write_session() as session:
+        project = session.query(Project).filter_by(name=name).first()
+        if project:
+            delete_all_file_section_embeddings(project.id)
+            console.print(f"Reindexing project - {project.name} at {project.path}")
+            index_project(project)
         else:
             console.print(f"Project with name - {name} does not exist.")
 

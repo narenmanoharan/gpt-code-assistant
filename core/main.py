@@ -10,7 +10,7 @@ from core.config import (CONFIG_FILE_PATH,
                          create_or_update_with_default_config,
                          save_selected_model)
 from data.database import create_tables_if_not_exists
-from repository.projects import _delete_project, create_or_update_project, list_all_projects
+from repository import projects
 
 logging.basicConfig(
     level=logging.INFO,
@@ -59,7 +59,6 @@ def select_model():
         save_selected_model(selected_model_name, selected_max_tokens)
     else:
         console.print("Invalid selection. Please enter a valid number.")
-        typer.Exit()
 
 
 @app.command()
@@ -71,7 +70,6 @@ def query(project_name: str, query: str):
         return
 
     query_llm(project_name, query)
-    typer.Exit()
 
 
 @app.command()
@@ -82,33 +80,29 @@ def create_project(name: str, path: str):
     absolute_path = os.path.abspath(path)
     if not os.path.exists(absolute_path):
         raise typer.BadParameter(f"Path {absolute_path} does not exist. Please enter a valid path.")
-    create_or_update_project(name, absolute_path)
-    typer.Exit()
+    projects.create_project(name, absolute_path)
 
 @app.command()
-def remove_project(name: str):
+def delete_project(name: str):
     """
-    Remove a project and delete all its data (embeddings included)
+    Delete a project and all its data (embeddings included)
     """
-    _delete_project(name)
-    typer.Exit()
+    projects.delete_project(name)
 
 
 @app.command()
-def reindex_project(name: str):
+def refresh_project(name: str):
     """
     Trigger a reindex of a project and update the embeddings to the latest content.
     """
-    console.print("Not implemented yet.")
-    typer.Exit()
+    projects.reindex_project(name)
 
 @app.command()
 def list_projects():
     """
     List all projects.
     """
-    list_all_projects()
-    typer.Exit()
+    projects.list_all_projects()
 
 @app.callback(invoke_without_command=True)
 def callback(ctx: typer.Context):
