@@ -25,7 +25,7 @@ def delete_all_file_section_embeddings(project_id: UUID):
 def create_file_section_embeddings(project_id: UUID, file_section_id: UUID, file_section: str):
     embedding = open_ai.create_embedding(file_section)
     get_file_section_collection(project_id).upsert(
-        ids=[str(file_section_id)], 
+        ids=[str(file_section_id)],
         embeddings=[embedding]
     )
 
