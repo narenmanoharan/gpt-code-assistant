@@ -4,6 +4,7 @@ from uuid import UUID
 import chromadb
 from chromadb.config import Settings
 from chromadb.utils import embedding_functions
+from ai import open_ai
 
 from core.config import BASE_DIR
 
@@ -22,7 +23,11 @@ def delete_all_file_section_embeddings(project_id: UUID):
     get_file_section_collection(project_id).delete()
 
 def create_file_section_embeddings(project_id: UUID, file_section_id: UUID, file_section: str):
-    get_file_section_collection(project_id).upsert(ids=[str(file_section_id)], documents=[file_section])
+    embedding = open_ai.create_embedding(file_section)
+    get_file_section_collection(project_id).upsert(
+        ids=[str(file_section_id)], 
+        embeddings=[embedding]
+    )
 
 def delete_file_section_embeddings(project_id: UUID, file_section_id: UUID):
     get_file_section_collection(project_id).delete(ids=[str(file_section_id)])
