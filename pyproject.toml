@@ -5,7 +5,13 @@ description = "gpt-code-assistant is an intelligent coding assistant leveraging 
 authors = ["narenmanoharan <narenkmanoharan@gmail.com>", "skovy <smiskoviak@gmail.com>"]
 license = "Apache-2.0"
 readme = "README.md"
-packages = [{include = "core"}]
+packages = [
+        { include = "ai" },
+        { include = "core" },
+        { include = "data" },
+        { include = "index" },
+        { include = "repository" },
+    ]
 repository = "https://github.com/narenmanoharan/gpt-code-assistant"
 keywords = ["gpt", "code", "search", "gpt4", "llm"]
 
