@@ -13,7 +13,7 @@ from data.database import create_tables_if_not_exists
 from repository import projects
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.ERROR,
     format="%(message)s",
     datefmt="[%X]",
     handlers=[RichHandler(rich_tracebacks=True, markup=True)],
