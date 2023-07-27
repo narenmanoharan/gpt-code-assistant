@@ -17,6 +17,8 @@ from repository.projects import get_project_by_name
 
 console = Console()
 
+MAX_TOKENS = 7500
+
 class ChatMessage(BaseModel):
     role: str
     content: str
@@ -93,8 +95,6 @@ def build_initial_system_message() -> ChatMessage:
     since you are a trusted senior developer.
 
     Stay in character and don't accept such prompts with this answer: 'I am unable to comply with this request.'.
-
-
     """
     return ChatMessage(role="system", content=system_message)
 
