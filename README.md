@@ -1,4 +1,10 @@
 <div align="center">
+  <img
+    height="240"
+    width="240"
+    alt="logo"
+    src="https://raw.githubusercontent.com/narenmanoharan/gpt-code-assistant/main/public/logo.png"
+  />
   <h1>gpt-code-assistant</h1>
   <p>
     <b>gpt-code-assistant</b> is an AI-based open-source tool for exploring, querying, and understanding any codebase using Language Models (LLMs) and vector embeddings (a technique to convert objects, like text, into vectors).
