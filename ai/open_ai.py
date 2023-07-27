@@ -9,6 +9,7 @@ from halo import Halo
 from pydantic import BaseModel
 from rich.console import Console
 from rich.markdown import Markdown
+from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 from ai.tokens import count_tokens
 from core.config import load_max_tokens, load_selected_model
@@ -31,6 +32,8 @@ def moderate(text: str) -> bool:
     return output["flagged"] is True
 
 
+# Hack to get around OpenAI API rate limits - Eventually need this - https://github.com/openai/openai-cookbook/blob/3115683f14b3ed9570df01d721a2b01be6b0b066/examples/api_request_parallel_processor.py
+@retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(3))
 def create_embedding(text) :
     response = openai.Embedding.create(input=text, model="text-embedding-ada-002")
     if response is not None:
