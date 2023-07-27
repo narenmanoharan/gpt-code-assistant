@@ -43,7 +43,7 @@ def source_files(project: Project) -> List[str]:
         "node_modules",
     ]
     file_paths = []
-    for dirpath, dirnames, filenames in tqdm(os.walk(project.path), desc="Walking through project directories"):
+    for dirpath, dirnames, filenames in os.walk(project.path):
         # Exclude directories and files matched by ignore_patterns
         dirnames[:] = [d for d in dirnames if not any(fnmatch.fnmatch(d, pattern) for pattern in ignore_patterns)]
         filenames[:] = [f for f in filenames if not any(fnmatch.fnmatch(f, pattern) for pattern in ignore_patterns)]
