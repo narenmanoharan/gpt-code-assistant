@@ -1,16 +1,16 @@
 # Contributing Guide
 
-First off, thank you for considering contributing to gpt-code-search! 🚀
+First off, thank you for considering contributing to gpt-code-assistant! 🚀
 
 ## Where do I go from here?
 
 If you've noticed a bug or have a feature request, make one here! It's generally best if you get confirmation of your bug or approval for your feature request this way before starting to code.
 
-Issue Tracker: https://github.com/narenmanoharan/gpt-code-search/issues
+Issue Tracker: https://github.com/narenmanoharan/gpt-code-assistant/issues
 
 ## Fork & Create a Branch
 
-If this is something you think you can fix, then fork gpt-code-search and create a branch with a descriptive name.
+If this is something you think you can fix, then fork gpt-code-assistant and create a branch with a descriptive name.
 
 A good branch name would be (where issue #325 is the ticket you're working on):
 
@@ -20,18 +20,18 @@ git checkout -b 325-contribution-guide
 
 ## Get the Code Running
 
-The following steps will get you running the gpt-code-search project locally.
+The following steps will get you running the gpt-code-assistant project locally.
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR-GITHUB-USERNAME/gpt-code-search.git
+git clone https://github.com/YOUR-GITHUB-USERNAME/gpt-code-assistant.git
 ```
 
-1. Change directory to gpt-code-search:
+1. Change directory to gpt-code-assistant:
 
 ```bash
-cd gpt-code-search
+cd gpt-code-assistant
 ```
 
 1. Install poetry using the instructions here: https://python-poetry.org/docs/#installing-with-the-official-installer. The project uses [poetry](https://python-poetry.org/) for dependency management and packaging.
@@ -57,7 +57,7 @@ export LOCAL_DEV=true
 1. Run the project:
 
 ```bash
-poetry run gpt-code-search
+poetry run gpt-code-assistant
 ```
 
 Now you can modify the codebase and see your changes!
@@ -81,7 +81,7 @@ git push origin BRANCH-NAME
 3. Press the "Create pull request" button.
 4. Now we wait for the maintainers to review your pull request!
 5. Once your pull request has been reviewed and the branch passes all tests, it will be merged into the main branch.
-6. Congratulations! You've successfully contributed to gpt-code-search!
+6. Congratulations! You've successfully contributed to gpt-code-assistant!
 
 ## Code review process
 

@@ -38,7 +38,7 @@ def list_all_projects():
     with read_only_session() as session:
         projects = session.query(Project).all()
         if not projects:
-            console.print("No projects found. Please create a project with `gcs create-project`.")
+            console.print("No projects found. Please create a project with `gpt-code-assistant create-project`.")
         else:
             table = Table(title="Projects")
             table.add_column("Name", style="cyan", no_wrap=True)

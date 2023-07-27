@@ -64,7 +64,7 @@ def select_model():
 @app.command()
 def query(project_name: str, query: str):
     """
-    Query your codebase. Provide the project name (you can list all projects with `gcs list-projects`)
+    Query your codebase. Provide the project name (you can list all projects with `gpt-code-assistant list-projects`)
     """
     if not check_openai_key():
         return

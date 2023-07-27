@@ -1,13 +1,13 @@
 <div align="center">
-  <h1>gpt-code-search</h1>
+  <h1>gpt-code-assistant</h1>
   <img
     height="240"
     width="240"
     alt="logo"
-    src="https://raw.githubusercontent.com/narenmanoharan/gpt-code-search/main/public/logo.png"
+    src="https://raw.githubusercontent.com/narenmanoharan/gpt-code-assistant/main/public/logo.png"
   />
   <p>
-    <b>gpt-code-search</b> is an AI-based tool enabling you to search your codebase using natural language. It employs Language Models (LLMs) and vector embeddings—a technique to convert objects, like text, into vectors—to retrieve, search, and answer queries about your code, boosting productivity and code understanding.
+    <b>gpt-code-assistant</b> is an AI-based tool for exploring, querying, and understanding your codebase using Language Models (LLMs) and vector embeddings (a technique to convert objects, like text, into vectors).
   </p>
 </div>
 
@@ -29,12 +29,14 @@
 - **Language Agnostic**: Supports multiple programming languages.
 - **Privacy-centric Design**: Code snippets are only transmitted when a question is asked and the Language Model requests the relevant code, ensuring privacy. **(Note: Code snippets are shared with OpenAI)**
 
+Future plans include supporting local models and the ability to generate code.
+
 ## Getting Started
 
 ### Installation
 
 ```bash
-pip install gpt-code-search
+pip install gpt-code-assistant
 ```
 
 ### Usage
@@ -44,9 +46,9 @@ pip install gpt-code-search
 First, create a project to index all the files. This step involves creating embeddings for each file and storing them in a local database.
 
 ```bash
-gpt-code-search create-project <project-name> <path-to-codebase>
+gpt-code-assistant create-project <project-name> <path-to-codebase>
 
-gpt-code-search create-project gpt-code-search .
+gpt-code-assistant create-project gpt-code-assistant .
 ```
 
 #### Ask a question about your codebase
@@ -54,21 +56,21 @@ gpt-code-search create-project gpt-code-search .
 To query about the purpose of your codebase, you can use the `query` command:
 
 ```bash
-gpt-code-search query <project-name> "What does this codebase do?"
+gpt-code-assistant query <project-name> "What does this codebase do?"
 ```
 
-<img src="public/demo.gif" width="750"  alt="gpt-code-search demo"/>
+<img src="public/demo.gif" width="750"  alt="gpt-code-assistant demo"/>
 
 If you want to generate a test for a specific file, for example analytics.py, you can mention the file name to improve accuracy:
 
 ```bash
-gpt-code-search query gpt-code-search "Can you generate a test for analytics.py?"
+gpt-code-assistant query gpt-code-assistant "Can you generate a test for analytics.py?"
 ```
 
 For a general usage question about a certain module, like analytics, you can use keywords to search across the codebase:
 
 ```bash
-gpt-code-search query gpt-code-search "How do I use the analytics module?"
+gpt-code-assistant query gpt-code-assistant "How do I use the analytics module?"
 ```
 
 **Remember, mentioning the file name or specific keywords improves the accuracy of the search.**
@@ -78,7 +80,7 @@ gpt-code-search query gpt-code-search "How do I use the analytics module?"
 To get a list of all the projects:
 
 ```bash
-gpt-code-search list-projects
+gpt-code-assistant list-projects
 ```
 
 #### Refresh a project
@@ -86,7 +88,7 @@ gpt-code-search list-projects
 If you want to reindex a project and update the embeddings to the latest content:
 
 ```bash
-gpt-code-search refresh-project <project-name>
+gpt-code-assistant refresh-project <project-name>
 ```
 
 #### Delete a project
@@ -94,7 +96,7 @@ gpt-code-search refresh-project <project-name>
 If you wish to delete a project and all its data (including embeddings):
 
 ```bash
-gpt-code-search delete-project <project-name>
+gpt-code-assistant delete-project <project-name>
 ```
 
 #### Select a model to use
@@ -102,10 +104,10 @@ gpt-code-search delete-project <project-name>
 You can select which model to use for your queries:
 
 ```bash
-gpt-code-search select-model
+gpt-code-assistant select-model
 ```
 
-Defaults to `gpt-3.5-turbo-16k`. The selected model is stored in `$HOME/.gpt-code-search/config.toml`.
+Defaults to `gpt-3.5-turbo-16k`. The selected model is stored in `$HOME/.gpt-code-assistant/config.toml`.
 
 ### Configuration
 
@@ -125,11 +127,12 @@ Examples of the types of questions you might want to ask:
 ## Roadmap
 
 - [x] Use vector embeddings to improve search and retrieval
+- [ ] Add support for additional models (Claude, Bedrock, etc)
+- [ ] Add support for local models (Llama2, Starcoder, etc)
 - [ ] Add support for generating code and saving it to a file
 - [ ] Support for searching across multiple codebases
 - [ ] Allow the model to create new functions that it can then execute
 - [ ] Use [guidance](https://github.com/microsoft/guidance) to improve prompts
-- [ ] Add support for additional models (Claude, Bedrock, etc)
 
 ## Contributing
 
@@ -143,11 +146,11 @@ We are committed to fostering a welcoming community. To ensure that everyone fee
 
 ## Support
 
-If you're having trouble using `gpt-code-search`, feel free to [open an issue](https://github.com/narenmanoharan/gpt-code-search/issues) on our GitHub. You can also reach out to us directly at [narenkmanoharan@gmail.com](mailto:narenkmanoharan@gmail.com). We're always happy to help!
+If you're having trouble using `gpt-code-assistant`, feel free to [open an issue](https://github.com/narenmanoharan/gpt-code-assistant/issues) on our GitHub. You can also reach out to us directly at [narenkmanoharan@gmail.com](mailto:narenkmanoharan@gmail.com). We're always happy to help!
 
 ## Feedback
 
-Your feedback is very important to us! If you have ideas for how we can improve `gpt-code-search`, we'd love to hear from you. Please [open an issue](https://github.com/narenmanoharan/gpt-code-search/issues) or reach out to us directly at [narenkmanoharan@gmail](mailto:narenkmanoharan@gmail) with your feedback or thoughts.
+Your feedback is very important to us! If you have ideas for how we can improve `gpt-code-assistant`, we'd love to hear from you. Please [open an issue](https://github.com/narenmanoharan/gpt-code-assistant/issues) or reach out to us directly at [narenkmanoharan@gmail](mailto:narenkmanoharan@gmail) with your feedback or thoughts.
 
 ## License
 

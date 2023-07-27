@@ -1,22 +1,21 @@
 [tool.poetry]
-name = "gpt-code-search"
-version = "0.0.10"
-description = "gpt-code-search enables you to search your codebase with natural language."
+name = "gpt-code-assistant"
+version = "0.0.1"
+description = "gpt-code-assistant is an intelligent coding assistant leveraging language models to search, retrieve, explore and comprehend your codebase."
 authors = ["narenmanoharan <narenkmanoharan@gmail.com>", "skovy <smiskoviak@gmail.com>"]
 license = "Apache-2.0"
 readme = "README.md"
 packages = [{include = "core"}]
-repository = "https://github.com/narenmanoharan/gpt-code-search"
+repository = "https://github.com/narenmanoharan/gpt-code-assistant"
 keywords = ["gpt", "code", "search", "gpt4", "llm"]
 
 [tool.poetry.urls]
-issues = "https://github.com/narenmanoharan/gpt-code-search/issues"
-discussions = "https://github.com/narenmanoharan/gpt-code-search/discussions"
-wiki = "https://github.com/narenmanoharan/gpt-code-search/wiki"
+issues = "https://github.com/narenmanoharan/gpt-code-assistant/issues"
+discussions = "https://github.com/narenmanoharan/gpt-code-assistant/discussions"
+wiki = "https://github.com/narenmanoharan/gpt-code-assistant/wiki"
 
 [tool.poetry.scripts]
-gpt-code-search = "core.main:app"
-gcs = "core.main:app"
+gpt-code-assistant = "core.main:app"
 
 [tool.poetry.dependencies]
 python = "^3.8.17"

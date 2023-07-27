@@ -6,9 +6,9 @@ import toml
 
 from ai import open_ai
 
-BASE_DIR = os.path.join(Path.home(), ".gpt-code-search")
+BASE_DIR = os.path.join(Path.home(), ".gpt-code-assistant")
 
-CONFIG_FILE_PATH = os.path.join(BASE_DIR, ".gpt-code-search/config.toml")
+CONFIG_FILE_PATH = os.path.join(BASE_DIR, ".gpt-code-assistant/config.toml")
 
 
 def create_or_update_with_default_config():
@@ -41,7 +41,7 @@ def load_selected_model():
     if selected_model not in models:
         raise ValueError(
             f"Invalid model {selected_model}. Valid models are {models}. "
-            f"Please run `gpt-code-search select-model` to select a valid model."
+            f"Please run `gpt-code-assistant select-model` to select a valid model."
         )
     return selected_model
 
