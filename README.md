@@ -1,7 +1,7 @@
 <div align="center">
   <h1>gpt-code-assistant</h1>
   <p>
-    <b>gpt-code-assistant</b> is an AI-based open-source tool for exploring, querying, and understanding your codebase using Language Models (LLMs) and vector embeddings (a technique to convert objects, like text, into vectors).
+    <b>gpt-code-assistant</b> is an AI-based open-source tool for exploring, querying, and understanding any codebase using Language Models (LLMs) and vector embeddings (a technique to convert objects, like text, into vectors).
   </p>
 </div>
 
