@@ -81,6 +81,7 @@ def create_project(name: str, path: str):
         session.refresh(project)
         if project:
             index_project(project)
+            console.print(f"Project - {project.name} created at {project.path} successfully.")
 
 
 def delete_project(name: str):
@@ -99,7 +100,7 @@ def delete_project(name: str):
             console.print(f"Project - {project.name} deleted.")
             session.commit()
         else:
-            console.print(f"Project with name - {name} does not exist.")
+            console.print(f"Project - {name} does not exist.")
 
 def reindex_project(name: str):
     """ Trigger a reindex of a project and update the embeddings to the latest content.
@@ -114,7 +115,7 @@ def reindex_project(name: str):
             console.print(f"Reindexing project - {project.name} at {project.path}")
             index_project(project)
         else:
-            console.print(f"Project with name - {name} does not exist.")
+            console.print(f"Project - {name} does not exist.")
 
 def index_project(project: Project):
     """ Start indexing the project.
