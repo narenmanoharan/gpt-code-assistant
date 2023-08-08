@@ -29,6 +29,7 @@ typer = {extras = ["all"], version = "^0.9.0"}
 rich = "^13.4.2"
 tiktoken = "^0.4.0"
 openai = "^0.27.8"
+litellm = "^0.1.356"
 termcolor = "^2.3.0"
 requests = "^2.31.0"
 toml = "^0.10.2"
