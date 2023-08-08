@@ -15,6 +15,7 @@ from ai.tokens import count_tokens
 from core.config import load_max_tokens, load_selected_model
 from data.query import MatchResult, match_file_sections
 from repository.projects import get_project_by_name
+from litellm import completion
 
 console = Console()
 
@@ -62,7 +63,7 @@ def query_llm(project_name: str, query: str):
         buffer = StringIO()
         with Halo(text='Loading response', spinner='dots'):
             try:
-                response = openai.ChatCompletion.create(
+                response = completion(
                     model=load_selected_model(),
                     messages=[message.dict() for message in messages],
                     stream=True,
